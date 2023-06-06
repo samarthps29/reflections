@@ -20,7 +20,7 @@ const NotesPage = () => {
 			>
 				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-stone-900"></div>
 				<Navigator />
-				<div className="overflow-x-none flex h-3/4 w-2/3 items-center justify-center rounded-lg bg-stone-400 bg-opacity-20 text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white backdrop-blur-lg">
+				<div className="overflow-x-none flex h-3/4 w-2/3 items-center justify-center rounded-lg bg-transparent text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white backdrop-blur-lg">
 					<NotesUpdated />
 				</div>
 			</div>
