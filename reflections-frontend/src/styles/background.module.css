@@ -1,0 +1,23 @@
+.bgi1 {
+	background-image: url("../assets/bg49.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.bgi2 {
+	background-image: url("../assets/bg41.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.bgi3 {
+	background-image: url("../assets/bg34.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.bgi4 {
+	background-image: url("../assets/bg53.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
