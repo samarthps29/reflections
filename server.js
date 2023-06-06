@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/dbConnection");
 const dotenv = require("dotenv").config();
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 // connecting to mongoDB
 connectDB();
@@ -27,7 +28,17 @@ app.use(express.json());
 // setting routes
 app.use("/api/user", require("./routes/userRoute"));
 app.use("/api/content", require("./routes/contentRoute"));
-app.use("*", require("./utility/handleRouteNotFound"));
+// app.use("*", require("./utility/handleRouteNotFound"));
+
+app.use(express.static(path.join(__dirname, "./reflections-frontend/dist")));
+app.get("*", (req, res) => {
+	res.sendFile(
+		path.join(__dirname, "./reflections-frontend/dist/index.html"),
+		(err) => {
+			res.status(500).send(err);
+		}
+	);
+});
 
 // starting the server
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 5000);

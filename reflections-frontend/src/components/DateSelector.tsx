@@ -1,5 +1,5 @@
 import { ConfigProvider, DatePicker, theme } from "antd";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 type DateSelectorProps = {
 	handleDateChange: (e: dayjs.Dayjs | null) => void;

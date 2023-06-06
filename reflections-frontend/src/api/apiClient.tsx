@@ -3,12 +3,12 @@ import jwtDecode from "jwt-decode";
 import { regenerateToken } from "../utility";
 
 const publicApiClient = axios.create({
-	baseURL: "http://localhost:5000",
+	baseURL: "",
 	withCredentials: true,
 });
 
 const privateApiClient = axios.create({
-	baseURL: "http://localhost:5000",
+	baseURL: "",
 	withCredentials: true,
 });
 

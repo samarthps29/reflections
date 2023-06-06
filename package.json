@@ -5,6 +5,7 @@
 	"main": "server.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js",
 		"devStart": "nodemon server.js"
 	},
 	"author": "",
@@ -18,6 +19,9 @@
 		"express-async-handler": "^1.2.0",
 		"jsonwebtoken": "^9.0.0",
 		"mongoose": "^7.2.2",
+		"path": "^0.12.7"
+	},
+	"devDependencies": {
 		"nodemon": "^2.0.22"
 	}
 }
