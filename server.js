@@ -28,7 +28,6 @@ app.use(express.json());
 // setting routes
 app.use("/api/user", require("./routes/userRoute"));
 app.use("/api/content", require("./routes/contentRoute"));
-// app.use("*", require("./utility/handleRouteNotFound"));
 
 app.use(express.static(path.join(__dirname, "./reflections-frontend/dist")));
 app.get("*", (req, res) => {

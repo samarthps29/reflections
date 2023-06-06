@@ -4,10 +4,12 @@ import NewTodo from "./components/TodoPage";
 import NewUserLogin from "./components/UserLoginPage";
 import NewUserSignup from "./components/UserSignupPage";
 import HandleRouteNotFound from "./utility/HandleRouteNotFound";
+import Redirect from "./components/Redirect";
 
 function App() {
 	return (
 		<Routes>
+			<Route path="/" element={<Redirect />} />
 			<Route path="/login" element={<NewUserLogin />} />
 			<Route path="/signup" element={<NewUserSignup />} />
 			<Route path="/notes" element={<NewNote />} />
