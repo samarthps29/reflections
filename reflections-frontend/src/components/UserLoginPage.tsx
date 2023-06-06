@@ -9,7 +9,7 @@ const UserLoginPage = () => {
 	const navigate = useNavigate();
 	return (
 		<div className={`flex items-center bg-[#0F0E0E]`}>
-			<div className="flex w-1/3 flex-col items-center pr-2">
+			<div className="flex w-full flex-col items-center pr-2 sm:w-1/3">
 				<div className="w-2/3">
 					<form
 						onSubmit={(e) => {
@@ -82,10 +82,10 @@ const UserLoginPage = () => {
 				</div>
 			</div>
 			<div
-				className={`relative flex h-screen w-2/3 ${styles.bgi1} items-center justify-center`}
+				className={`relative flex h-screen w-0 overflow-hidden sm:w-2/3 ${styles.bgi1} items-center justify-center`}
 			>
 				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-black border-opacity-90" />
-				<div className="overflow-x-none md: flex h-1/3 w-2/3 items-center justify-center rounded-xl bg-stone-900 bg-opacity-60 text-center font-inter text-3xl/[30px] font-extrabold tracking-tighter text-white backdrop-blur-2xl md:text-4xl/[40px] xl:text-5xl/[50px]">
+				<div className="flex h-1/3 w-2/3 items-center justify-center rounded-xl bg-stone-900 bg-opacity-60 text-center font-inter text-3xl/[30px] font-extrabold tracking-tighter text-white backdrop-blur-2xl md:text-4xl/[40px] xl:text-5xl/[50px]">
 					<p className="px-5">
 						Minimalist Magic: Streamline Your Notes and Diary with
 						Ease

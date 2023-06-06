@@ -40,4 +40,4 @@ app.get("*", (req, res) => {
 });
 
 // starting the server
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 5001);

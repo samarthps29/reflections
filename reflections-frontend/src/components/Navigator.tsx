@@ -37,6 +37,7 @@ const Navigator = () => {
 					onClick={() => {
 						userServices.get("/logout");
 						localStorage.removeItem("accessToken");
+						localStorage.removeItem("userName");
 						navigate("/login");
 					}}
 				>

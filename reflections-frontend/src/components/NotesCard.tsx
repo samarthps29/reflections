@@ -65,7 +65,7 @@ const NotesCard = () => {
 		//#171010
 		// #191919
 		<div
-			className={`flex min-h-full grow flex-col items-center gap-4 rounded-2xl bg-[#222222] p-4`}
+			className={`flex h-full w-full flex-col items-center gap-4 rounded-2xl bg-[#222222] p-4`}
 		>
 			<div className="relative flex min-w-full flex-row items-center justify-center">
 				<Title title="Notes" />
@@ -81,7 +81,7 @@ const NotesCard = () => {
 			<textarea
 				// #F7EFE5
 				// #ECF2FF
-				className={`min-w-full grow resize-none scroll-smooth rounded-md bg-transparent py-2 pl-3 pr-3 font-serif text-xl/[35px] font-medium text-[#E0E5F1] focus:outline-none`}
+				className={`w-full resize-none scroll-smooth rounded-md bg-transparent py-2 pl-3 pr-3 font-serif text-lg/[28px] font-medium text-[#E0E5F1] focus:outline-none md:text-xl/[35px]`}
 				style={{ minHeight: "32vh" }}
 				ref={notesRef}
 				disabled={status}

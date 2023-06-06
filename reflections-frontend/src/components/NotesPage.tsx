@@ -8,7 +8,7 @@ const NotesPage = () => {
 	// #181823
 	return (
 		<div className={`flex items-center bg-[#161616]`}>
-			<div className="flex w-1/3 flex-col items-center">
+			<div className="flex w-0 flex-col items-center sm:w-1/3">
 				<div className="w-4/5">
 					<p className="text-center font-inter text-4xl/[40px] font-extrabold tracking-tighter text-[#537EC5] md:text-5xl/[50px] lg:text-6xl/[60px]">
 						Journey through the Realm of Notes.
@@ -16,7 +16,7 @@ const NotesPage = () => {
 				</div>
 			</div>
 			<div
-				className={`relative flex h-screen w-2/3 ${styles.bgi3} items-center justify-center`}
+				className={`relative flex h-screen w-full sm:w-2/3 ${styles.bgi3} items-center justify-center`}
 			>
 				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-stone-900"></div>
 				<Navigator />
