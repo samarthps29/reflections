@@ -1,6 +1,6 @@
-import NotesUpdated from "./NotesCard";
-import Navigator from "./Navigator";
 import styles from "../styles/background.module.css";
+import Navigator from "./Navigator";
+import NotesCard from "./NotesCard";
 
 const NotesPage = () => {
 	// blue bg color -> #8EA7E9
@@ -20,8 +20,8 @@ const NotesPage = () => {
 			>
 				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-stone-900"></div>
 				<Navigator />
-				<div className="overflow-x-none flex h-3/4 w-2/3 items-center justify-center rounded-2xl bg-transparent text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white">
-					<NotesUpdated />
+				<div className="flex h-3/4 w-2/3 items-center justify-center rounded-2xl text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white">
+					<NotesCard />
 				</div>
 			</div>
 		</div>
