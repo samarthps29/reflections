@@ -1,4 +1,4 @@
-import { publicApiClient } from "./api/apiClient";
+import { publicApiClient } from "../api/apiClient";
 
 export const regenerateToken = () => {
 	publicApiClient
@@ -10,6 +10,6 @@ export const regenerateToken = () => {
 			}
 		})
 		.catch(() => {
-			window.location.href = "/user";
+			window.location.href = "/login";
 		});
 };

@@ -31,14 +31,18 @@ const generateNewToken = (req, res) => {
 	else if (!refreshTokens.includes(refreshToken))
 		res.status(400).json({ message: "Refresh token is not valid" });
 	else {
-		jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY, (err, decoded) => {
-			if (err) res.status(400).json({ message: "Invalid token" });
-			// console.log(decoded);
-			const newAccessToken = generateAccessToken(decoded);
-			res.status(200).json({
-				accessToken: newAccessToken,
-			});
-		});
+		jwt.verify(
+			refreshToken,
+			process.env.REFRESH_SECRET_KEY,
+			(err, decoded) => {
+				if (err) res.status(400).json({ message: "Invalid token" });
+				// console.log(decoded);
+				const newAccessToken = generateAccessToken(decoded);
+				res.status(200).json({
+					accessToken: newAccessToken,
+				});
+			}
+		);
 	}
 };
 
@@ -65,6 +69,11 @@ const userLogin = asyncHandler(async (req, res) => {
 	}
 });
 
+const userLogout = asyncHandler(async (req, res) => {
+	res.clearCookie("refreshToken");
+	res.status(200).json({ message: "Cookie Cleared" });
+});
+
 const createUser = asyncHandler(async (req, res) => {
 	const { name, userName, email, password } = req.body;
 	if (!name || !userName || !email || !password) {
@@ -86,4 +95,4 @@ const createUser = asyncHandler(async (req, res) => {
 	}
 });
 
-module.exports = { userLogin, createUser, generateNewToken };
+module.exports = { userLogin, userLogout, createUser, generateNewToken };

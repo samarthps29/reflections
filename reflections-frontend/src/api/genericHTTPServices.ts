@@ -7,6 +7,9 @@ class HTTPServices {
 		this.endpoint = endpoint;
 		this.apiClient = apiClient;
 	}
+	get(path: string) {
+		return this.apiClient.get(this.endpoint + path);
+	}
 	post(path: string, entity: any) {
 		return this.apiClient.post(this.endpoint + path, entity);
 	}

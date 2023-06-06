@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { regenerateToken } from "../utility";
+import { regenerateToken } from "../utility/utility";
 
 const publicApiClient = axios.create({
 	baseURL: "",
