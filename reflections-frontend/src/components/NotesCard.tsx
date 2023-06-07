@@ -77,7 +77,7 @@ const NotesCard = () => {
 				/>
 			</div>
 			<textarea
-				className={`reize-none h-full w-full scroll-smooth rounded-md bg-transparent py-2 pl-3 pr-3 font-serif text-lg/[28px] font-medium text-[#E0E5F1] focus:outline-none md:text-xl/[35px]`}
+				className={`h-full w-full resize-none scroll-smooth rounded-md bg-transparent py-2 pl-3 pr-3 font-serif text-lg/[28px] font-medium text-[#E0E5F1] focus:outline-none md:text-xl/[35px]`}
 				style={{ minHeight: "32vh" }}
 				ref={notesRef}
 				disabled={status}

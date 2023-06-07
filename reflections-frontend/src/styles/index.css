@@ -6,7 +6,7 @@ body {
 }
 
 body::-webkit-scrollbar {
-	width: 2px;
+	width: 1px;
 }
 
 body::-webkit-scrollbar-track {
@@ -32,7 +32,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .scDiv::-webkit-scrollbar {
-	width: 2px;
+	width: 1px;
 }
 
 .scDiv::-webkit-scrollbar-track {
