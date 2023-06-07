@@ -3,8 +3,6 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-let refreshTokens = [];
-
 const generateAccessToken = (user) => {
 	return jwt.sign(
 		{ id: user.id, userName: user.userName },
@@ -28,8 +26,6 @@ const generateRefreshToken = (user) => {
 const generateNewToken = (req, res) => {
 	const refreshToken = req.cookies.refreshToken;
 	if (!refreshToken) res.status(400).json({ message: "Not authenticated" });
-	else if (!refreshTokens.includes(refreshToken))
-		res.status(400).json({ message: "Refresh token is not valid" });
 	else {
 		jwt.verify(
 			refreshToken,
@@ -56,7 +52,6 @@ const userLogin = asyncHandler(async (req, res) => {
 		const accessToken = generateAccessToken(user);
 		const refreshToken = generateRefreshToken(user);
 		// Sending the refresh token as HTTP only cookie
-		refreshTokens.push(refreshToken);
 		res.cookie("refreshToken", refreshToken, {
 			httpOnly: true,
 			sameSite: "None",
