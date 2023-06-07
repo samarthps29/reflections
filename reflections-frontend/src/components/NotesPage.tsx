@@ -5,9 +5,6 @@ import NotesCard from "./NotesCard";
 
 const NotesPage = () => {
 	const [fullScreen, setFullScreen] = useState(true);
-	// blue bg color -> #8EA7E9
-	// black font color -> black
-	// #181823
 	return (
 		<div className={`flex items-center bg-[#161616]`}>
 			<div
@@ -28,7 +25,7 @@ const NotesPage = () => {
 			>
 				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-stone-900"></div>
 				<Navigator setFullScreen={setFullScreen} />
-				<div className="flex h-4/5 w-3/4 items-center justify-center rounded-2xl text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white">
+				<div className="z-10 flex h-4/5 w-3/4 items-center justify-center rounded-lg bg-stone-400 bg-opacity-20 text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white">
 					<NotesCard />
 				</div>
 			</div>

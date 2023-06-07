@@ -26,7 +26,7 @@ const TodoPage = () => {
 				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-stone-900"></div>
 				<Navigator setFullScreen={setFullScreen} />
 
-				<div className="overflow-x-none flex h-4/5 w-3/4 items-center justify-center rounded-2xl bg-transparent">
+				<div className="flex h-4/5 w-3/4 items-center justify-center rounded-lg bg-stone-400 bg-opacity-20 text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white ">
 					<TodoCard />
 				</div>
 			</div>
