@@ -55,11 +55,27 @@ const TodoCard = () => {
 			.post("", { date: dateChanged })
 			.then((res) => {
 				setItems(() => res.data[0].todoContent);
-				if (res.data[0].todoContent.length === 0) setStatus(false);
-				else setStatus(true);
+				if (res.data[0].todoContent.length === 0) {
+					setStatus(false);
+					setItems([
+						{
+							id: uuidV4(),
+							content: "",
+							height: 77,
+							done: false,
+						},
+					]);
+				} else setStatus(true);
 			})
 			.catch(() => {
-				setItems([]);
+				setItems([
+					{
+						id: uuidV4(),
+						content: "",
+						height: 77,
+						done: false,
+					},
+				]);
 				setStatus(false);
 			});
 	};
@@ -74,13 +90,13 @@ const TodoCard = () => {
 					return {
 						...item,
 						content: event.target.value,
-						height: event.target.scrollHeight + 4,
+						height: event.target.scrollHeight + 5,
 					};
 				else return item;
 			});
 		});
 		event.target.style.height = "auto";
-		event.target.style.height = `${event.target.scrollHeight + 4}px`;
+		event.target.style.height = `${event.target.scrollHeight + 5}px`;
 	};
 
 	const addListItem = () => {
@@ -96,7 +112,7 @@ const TodoCard = () => {
 					{
 						id: uuidV4(),
 						content: "",
-						height: 76,
+						height: 77,
 						done: false,
 					},
 				];
