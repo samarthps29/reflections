@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { v4 as uuidV4 } from "uuid";
-import DateSelector from "./DateSelector";
-import Locker from "./ToggleManager";
-import Title from "./ComponentTitle";
 import contentServices from "../api/contentServices";
 import { CheckIcon, PlusIcon1 } from "../icons/SVGIcons";
 import "../styles/index.css";
+import ComponentTitle from "./ComponentTitle";
+import DateSelector from "./DateSelector";
+import ToggleManager from "./ToggleManager";
 
 const TodoCard = () => {
 	const [status, setStatus] = useState(false);
@@ -114,9 +114,9 @@ const TodoCard = () => {
 			className={`z-10 flex h-full w-full flex-col items-center gap-4 overflow-auto scroll-smooth rounded-2xl bg-[#222222] p-4`}
 		>
 			<div className="relative flex min-w-full flex-row items-center justify-center">
-				<Title title="Todo" />
+				<ComponentTitle title="Todo" />
 				<DateSelector handleDateChange={handleDateChange} />
-				<Locker
+				<ToggleManager
 					status={status}
 					setStatus={setStatus}
 					onClick={() => !status && handleClick(date)}

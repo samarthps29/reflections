@@ -2,18 +2,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CrossIcon, PlusIcon2 } from "../icons/SVGIcons";
 import userServices from "../api/userServices";
 
-const Navigator = () => {
+const Navigator = ({
+	setFullScreen,
+}: {
+	setFullScreen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	return (
-		<div className="absolute bottom-4 right-4 z-20 grid grid-cols-1 items-center justify-center gap-1">
+		<div className="absolute bottom-2 right-2 z-20 grid scale-90 grid-cols-1 items-center justify-center gap-1 md:bottom-4 md:right-4 md:scale-100">
 			<div className="flex items-center justify-center rounded-md bg-[#d9e0fd] p-1">
 				<button
-					title="Login"
+					title="Fullscreen"
 					className=""
-					onClick={() => {
-						navigate("/login");
-					}}
+					onClick={() => setFullScreen((prev) => !prev)}
 				>
 					<PlusIcon2 />
 				</button>

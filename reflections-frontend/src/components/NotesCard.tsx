@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
-import DateSelector from "./DateSelector";
-import Locker from "./ToggleManager";
-import Title from "./ComponentTitle";
 import contentServices from "../api/contentServices";
+import ComponentTitle from "./ComponentTitle";
+import DateSelector from "./DateSelector";
+import ToggleManager from "./ToggleManager";
 
 const NotesCard = () => {
 	const notesRef = useRef<HTMLTextAreaElement>(null);
@@ -68,9 +68,9 @@ const NotesCard = () => {
 			className={`flex h-full w-full flex-col items-center gap-4 rounded-2xl bg-[#222222] p-4`}
 		>
 			<div className="relative flex min-w-full flex-row items-center justify-center">
-				<Title title="Notes" />
+				<ComponentTitle title="Notes" />
 				<DateSelector handleDateChange={handleDateChange} />
-				<Locker
+				<ToggleManager
 					status={status}
 					setStatus={setStatus}
 					onClick={() =>

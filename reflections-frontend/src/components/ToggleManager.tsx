@@ -7,14 +7,14 @@ type ToggleManagerProps = {
 const ToggleManager = ({ status, setStatus, onClick }: ToggleManagerProps) => {
 	return (
 		<button
-			className="absolute right-2"
+			className="absolute right-1"
 			onClick={() => {
 				setStatus((prevStatus) => !prevStatus);
 				onClick();
 			}}
 		>
 			<div
-				className={`flex items-center justify-center rounded-md px-2 text-sm font-bold text-[#ECF2FF] md:text-lg`}
+				className={`flex items-center justify-center rounded-md px-2 text-xs font-bold text-[#ECF2FF] sm:text-sm md:text-lg`}
 			>
 				{status ? "Locked" : "Unlocked"}
 			</div>
