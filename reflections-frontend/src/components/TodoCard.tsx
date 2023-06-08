@@ -139,7 +139,7 @@ const TodoCard = () => {
 				/>
 			</div>
 			<div
-				className={`scDiv w-full grow overflow-auto scroll-smooth rounded-md bg-transparent px-2 text-xl font-medium`}
+				className={`customScroll w-full grow overflow-auto scroll-smooth rounded-md bg-transparent px-2 text-xl font-medium`}
 			>
 				<ul className="flex flex-col gap-3 pr-2">
 					{items.map((item) => {

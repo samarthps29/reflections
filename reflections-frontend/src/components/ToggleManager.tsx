@@ -16,7 +16,7 @@ const ToggleManager = ({ status, setStatus, onClick }: ToggleManagerProps) => {
 			<div
 				className={`flex items-center justify-center rounded-md px-2 text-xs font-bold text-[#ECF2FF] sm:text-sm md:text-lg`}
 			>
-				{status ? "Locked" : "Unlocked"}
+				{status ? "Edit" : "Save"}
 			</div>
 		</button>
 	);
