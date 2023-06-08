@@ -26,12 +26,10 @@ const NotesCard = () => {
 			.post("", { date })
 			.then((res) => {
 				const id = res.data[0]._id;
-				if (notesContent != "") {
-					contentServices
-						.put(id, { notesContent })
-						.then(() => console.log("Updated Successfully!"))
-						.catch(() => console.log("Could not update content"));
-				}
+				contentServices
+					.put(id, { notesContent })
+					.then(() => console.log("Updated Successfully!"))
+					.catch(() => console.log("Could not update content"));
 			})
 			.catch(() =>
 				contentServices
@@ -76,7 +74,34 @@ const NotesCard = () => {
 	};
 
 	useEffect(() => {
-		handleDateChange(dayjs());
+		const dateChanged = dayjs().format("YYYY-MM-DD");
+		setDate(dateChanged);
+
+		contentServices
+			.post("", { date: dateChanged })
+			.then((res) => {
+				if (res.data[0].notesContent === "") {
+					if (notesRef && notesRef.current) {
+						notesRef.current.value = "";
+					}
+					setNotesValue("");
+					setStatus(false);
+				} else {
+					if (notesRef && notesRef.current) {
+						notesRef.current.value = res.data[0].notesContent;
+					}
+					setNotesValue(res.data[0].notesContent);
+					setStatus(true);
+				}
+			})
+			.catch(() => {
+				if (notesRef && notesRef.current) {
+					notesRef.current.value = "";
+				}
+				setNotesValue("");
+				setStatus(false);
+				console.log("No content for this day yet!");
+			});
 	}, []);
 
 	return (
