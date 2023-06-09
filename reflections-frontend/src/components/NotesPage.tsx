@@ -23,13 +23,12 @@ const NotesPage = () => {
 				</div>
 			</div>
 			<div
-				className={`relative flex h-screen w-full ${
+				className={`flex h-screen w-full ${
 					fullScreen ? "" : "w-full sm:w-3/4"
 				} ${styles.bgi3} items-center justify-center`}
 			>
-				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-stone-900"></div>
-				<Navigator setFullScreen={setFullScreen} />
-				<div className="z-10 flex h-5/6 w-11/12 items-center justify-center rounded-2xl bg-stone-600 text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white">
+				<div className="relative z-10 flex h-full w-full items-center justify-center rounded-2xl p-10 text-center font-inter text-5xl/[46px] font-bold tracking-tighter text-white">
+					<Navigator setFullScreen={setFullScreen} />
 					<NotesCard />
 				</div>
 			</div>

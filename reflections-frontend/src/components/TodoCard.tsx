@@ -151,7 +151,7 @@ const TodoCard = () => {
 											style={{ height: item.height }}
 											value={item.content}
 											className={`border-1 w-full resize-none scroll-smooth rounded-xl border border-stone-600 border-opacity-70
-											bg-transparent py-2 pl-2 pr-2 font-serif text-lg/[28px] font-medium tracking-tight text-[#E0E5F1] focus:outline-none md:text-xl/[33px]`}
+											bg-transparent py-2 pl-4 pr-4 font-serif text-lg/[28px] font-medium tracking-tight text-[#E0E5F1] focus:outline-none md:text-xl/[33px]`}
 											spellCheck={false}
 											disabled={status}
 											onChange={(event) =>
@@ -194,7 +194,7 @@ const TodoCard = () => {
 											// #B9B2A6
 											style={{ height: item.height }}
 											value={item.content}
-											className={`border-1 z-10 w-full resize-none scroll-smooth rounded-xl border border-stone-600 border-opacity-70 bg-transparent py-2 pl-2 pr-2 font-serif text-lg/[28px] font-medium tracking-tight text-[#E0E5F1] line-through decoration-[#E0E5F1] decoration-2 focus:outline-none md:text-xl/[33px]`}
+											className={`border-1 z-10 w-full resize-none scroll-smooth rounded-xl border border-stone-600 border-opacity-70 bg-transparent py-2 pl-4 pr-4 font-serif text-lg/[28px] font-medium tracking-tight text-[#E0E5F1] line-through decoration-[#E0E5F1] decoration-2 focus:outline-none md:text-xl/[33px]`}
 											spellCheck={false}
 											disabled={item.done}
 											onChange={(event) =>

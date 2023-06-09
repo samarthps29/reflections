@@ -10,7 +10,7 @@ const Navigator = ({
 	const navigate = useNavigate();
 	const location = useLocation();
 	return (
-		<div className="absolute bottom-2 right-2 z-20 grid scale-90 grid-cols-3 items-center justify-center gap-1 md:bottom-4 md:right-4 md:scale-100">
+		<div className="absolute bottom-12 right-12 z-20 grid scale-90 grid-cols-3 items-center justify-center gap-1 md:bottom-14 md:right-14 md:scale-100">
 			<div className="flex items-center justify-center rounded-md bg-[#d9e0fd] p-1">
 				<button
 					title="Fullscreen"
