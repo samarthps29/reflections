@@ -133,8 +133,8 @@ const TodoCard = () => {
 				<ComponentTitle title="Todo" />
 				<DateSelector handleDateChange={handleDateChange} />
 				<ToggleManager
-					status={status}
-					setStatus={setStatus}
+					//status={status}
+					//setStatus={setStatus}
 					onClick={() => !status && handleClick(date)}
 				/>
 			</div>

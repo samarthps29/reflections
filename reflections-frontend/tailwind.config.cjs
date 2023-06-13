@@ -6,7 +6,6 @@ export default {
 		extend: {
 			fontFamily: {
 				inter: ["inter", "serif"],
-				mono: ["Caveat"],
 				serif: ["Poppins"],
 			},
 		},

@@ -7,7 +7,7 @@ const Redirect = () => {
 		const accessToken = localStorage.getItem("accessToken");
 		if (accessToken) {
 			console.log(accessToken);
-			navigate("/notes");
+			navigate("/");
 		} else navigate("/login");
 	});
 

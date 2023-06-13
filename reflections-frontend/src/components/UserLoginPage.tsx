@@ -29,7 +29,7 @@ const UserLoginPage = () => {
 											"userName",
 											emailRef.current!.value
 										);
-										navigate("/notes");
+										navigate("/");
 									}
 								})
 								.catch((err) => console.log(err));

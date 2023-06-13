@@ -12,7 +12,7 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 				algorithm: theme.darkAlgorithm,
 				token: {
 					colorInfo: "white",
-					colorPrimary: "#7286D3",
+					colorPrimary: "black",
 					colorTextBase: "white",
 					fontSize: 17,
 				},
