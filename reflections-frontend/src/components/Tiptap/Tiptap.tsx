@@ -182,12 +182,12 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 			>
 				horizontal rule
 			</button>
-			<button
+			{/* <button
 				onClick={() => editor.chain().focus().setHardBreak().run()}
 				className="rounded-md border  px-2 py-0.5 text-white"
 			>
 				hard break
-			</button>
+			</button> */}
 			<button
 				onClick={() => editor.chain().focus().undo().run()}
 				disabled={!editor.can().chain().focus().undo().run()}
