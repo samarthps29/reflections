@@ -4,12 +4,14 @@ import Highlight from "@tiptap/extension-highlight";
 import ListItem from "@tiptap/extension-list-item";
 import Paragraph from "@tiptap/extension-paragraph";
 import TextStyle from "@tiptap/extension-text-style";
+import Typography from "@tiptap/extension-typography";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import "./styles.scss";
 import userServices from "../../api/userServices";
 import { useNavigate } from "react-router-dom";
+import { SmilieReplacer } from "./SmilieReplacer";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	if (!editor) {
@@ -334,6 +336,7 @@ const Tiptap = ({
 		extensions: [
 			Document,
 			Paragraph,
+			Typography,
 			Highlight.configure({ multicolor: true }),
 			Color.configure({ types: [TextStyle.name, ListItem.name] }),
 			TextStyle.configure(),
@@ -347,6 +350,7 @@ const Tiptap = ({
 					keepAttributes: false,
 				},
 			}),
+			SmilieReplacer,
 		],
 		onUpdate: ({ editor }) => {
 			const html = editor.getHTML();
