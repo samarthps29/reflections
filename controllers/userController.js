@@ -52,10 +52,13 @@ const userLogin = asyncHandler(async (req, res) => {
 		const accessToken = generateAccessToken(user);
 		const refreshToken = generateRefreshToken(user);
 		// Sending the refresh token as HTTP only cookie
+		const oneWeekInSeconds = 7 * 24 * 60 * 60; // 1 week in seconds
+		const expirationDate = new Date(Date.now() + oneWeekInSeconds * 1000); // Calculat expiration date
 		res.cookie("refreshToken", refreshToken, {
 			httpOnly: true,
 			sameSite: "None",
 			secure: true,
+			expires: expirationDate,
 		});
 		// Sending the access token as JSON Object
 		res.status(200).json({ accessToken });
