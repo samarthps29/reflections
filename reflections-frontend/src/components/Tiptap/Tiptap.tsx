@@ -1,10 +1,13 @@
-import "./styles.scss";
 import { Color } from "@tiptap/extension-color";
+import Document from "@tiptap/extension-document";
+import Highlight from "@tiptap/extension-highlight";
 import ListItem from "@tiptap/extension-list-item";
+import Paragraph from "@tiptap/extension-paragraph";
 import TextStyle from "@tiptap/extension-text-style";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
+import "./styles.scss";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	if (!editor) {
@@ -200,29 +203,63 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				redo
 			</button>
 			<button
-				onClick={() => editor.chain().focus().setColor("#958DF1").run()}
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#b197fc" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#b197fc" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
 				className={`${
-					editor.isActive("textStyle", { color: "#958DF1" })
+					editor.isActive("highlight", { color: "#b197fc" })
 						? "is-active"
 						: "text-white"
-				} rounded-md border px-2 py-0.5`}
+				}
+				rounded-md border px-2 py-0.5`}
 			>
 				purple
 			</button>
 			<button
-				onClick={() => editor.chain().focus().setColor("#f18d8d").run()}
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#ffc078" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#ffc078" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
 				className={`${
-					editor.isActive("textStyle", { color: "#f18d8d" })
+					editor.isActive("highlight", { color: "#ffc078" })
 						? "is-active"
 						: "text-white"
 				} rounded-md border px-2 py-0.5`}
 			>
-				orange
+				yellow
 			</button>
 			<button
-				onClick={() => editor.chain().focus().setColor("#7bd88f").run()}
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#8ce99a" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#8ce99a" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
 				className={`${
-					editor.isActive("textStyle", { color: "#7bd88f" })
+					editor.isActive("highlight", { color: "#8ce99a" })
 						? "is-active"
 						: "text-white"
 				} rounded-md border px-2 py-0.5`}
@@ -230,9 +267,20 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				green
 			</button>
 			<button
-				onClick={() => editor.chain().focus().setColor("#58b5e2").run()}
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#74c0fc" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#74c0fc" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
 				className={`${
-					editor.isActive("textStyle", { color: "#58b5e2" })
+					editor.isActive("highlight", { color: "#74c0fc" })
 						? "is-active"
 						: "text-white"
 				} rounded-md border px-2 py-0.5`}
@@ -240,24 +288,25 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				blue
 			</button>
 			<button
-				onClick={() => editor.chain().focus().setColor("#fc618d").run()}
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#ff8888" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#ff8888" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
 				className={`${
-					editor.isActive("textStyle", { color: "#fc618d" })
+					editor.isActive("highlight", { color: "#ff8888" })
 						? "is-active"
 						: "text-white"
 				} rounded-md border px-2 py-0.5`}
 			>
 				red
-			</button>
-			<button
-				onClick={() => editor.chain().focus().setColor("#f0b760").run()}
-				className={`${
-					editor.isActive("textStyle", { color: "#f0b760" })
-						? "is-active"
-						: "text-white"
-				} rounded-md border px-2 py-0.5`}
-			>
-				yellow
 			</button>
 		</div>
 	);
@@ -272,6 +321,9 @@ const Tiptap = ({
 }) => {
 	const editor = useEditor({
 		extensions: [
+			Document,
+			Paragraph,
+			Highlight.configure({ multicolor: true }),
 			Color.configure({ types: [TextStyle.name, ListItem.name] }),
 			TextStyle.configure(),
 			StarterKit.configure({
