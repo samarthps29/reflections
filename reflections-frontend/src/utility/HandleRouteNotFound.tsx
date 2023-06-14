@@ -5,7 +5,7 @@ const HandleRouteNotFound = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		setTimeout(() => {
-			navigate("/login", { replace: true });
+			navigate("/", { replace: true });
 		}, 3000);
 	}, []);
 	return (

@@ -15,11 +15,27 @@ const privateApiClient = axios.create({
 privateApiClient.interceptors.request.use((config) => {
 	const accessToken = localStorage.getItem("accessToken");
 	const currDate = new Date();
-	const decodedToken: { exp: number } = jwtDecode(accessToken!);
-	const expTime = decodedToken!.exp;
-	if (expTime * 1000 < currDate.getTime()) {
-		const newToken = regenerateToken();
-		config.headers["Authorization"] = `Bearer ${newToken}`;
+	let decodedToken: { exp: number }, expTime;
+
+	if (accessToken) {
+		decodedToken = jwtDecode(accessToken);
+		expTime = decodedToken.exp;
+	}
+
+	if ((expTime && expTime * 1000 < currDate.getTime()) || !accessToken) {
+		const promise = regenerateToken();
+		promise
+			.then((res) => {
+				if (res.data.accessToken) {
+					localStorage.setItem("accessToken", res.data.accessToken);
+					config.headers[
+						"Authorization"
+					] = `Bearer ${res.data.accessToken}`;
+				}
+			})
+			.catch(() => {
+				window.location.href = "/login";
+			});
 	} else {
 		config.headers["Authorization"] = `Bearer ${accessToken}`;
 	}
