@@ -8,12 +8,14 @@ import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import "./styles.scss";
+import userServices from "../../api/userServices";
+import { useNavigate } from "react-router-dom";
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	if (!editor) {
 		return null;
 	}
-
+	const navigate = useNavigate();
 	return (
 		<div className="flex flex-wrap gap-2 px-3 pb-2">
 			<button
@@ -229,6 +231,48 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					editor
 						.chain()
 						.focus()
+						.toggleHighlight({ color: "#74c0fc" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#74c0fc" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
+				className={`${
+					editor.isActive("highlight", { color: "#74c0fc" })
+						? "is-active"
+						: "text-white"
+				} rounded-md border px-2 py-0.5`}
+			>
+				blue
+			</button>
+			<button
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#ff8888" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#ff8888" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
+				className={`${
+					editor.isActive("highlight", { color: "#ff8888" })
+						? "is-active"
+						: "text-white"
+				} rounded-md border px-2 py-0.5`}
+			>
+				red
+			</button>
+			<button
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
 						.toggleHighlight({ color: "#ffc078" })
 						.setColor(
 							editor?.isActive("highlight", { color: "#ffc078" })
@@ -267,46 +311,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				green
 			</button>
 			<button
-				onClick={() =>
-					editor
-						.chain()
-						.focus()
-						.toggleHighlight({ color: "#74c0fc" })
-						.setColor(
-							editor?.isActive("highlight", { color: "#74c0fc" })
-								? ""
-								: "#000000"
-						)
-						.run()
-				}
-				className={`${
-					editor.isActive("highlight", { color: "#74c0fc" })
-						? "is-active"
-						: "text-white"
-				} rounded-md border px-2 py-0.5`}
+				className="rounded-md border px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"
+				onClick={() => {
+					userServices.get("/logout");
+					navigate("/login");
+				}}
 			>
-				blue
-			</button>
-			<button
-				onClick={() =>
-					editor
-						.chain()
-						.focus()
-						.toggleHighlight({ color: "#ff8888" })
-						.setColor(
-							editor?.isActive("highlight", { color: "#ff8888" })
-								? ""
-								: "#000000"
-						)
-						.run()
-				}
-				className={`${
-					editor.isActive("highlight", { color: "#ff8888" })
-						? "is-active"
-						: "text-white"
-				} rounded-md border px-2 py-0.5`}
-			>
-				red
+				logout
 			</button>
 		</div>
 	);

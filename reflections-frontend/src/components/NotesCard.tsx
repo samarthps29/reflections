@@ -10,12 +10,14 @@ const NotesCard = () => {
 	const [notesValue, setNotesValue] = useState<string>("");
 	const [editorValue, setEditorValue] = useState<string>("");
 	const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
+	const [isSaving, setIsSaving] = useState(false);
 
 	const handleClick = (
 		date: string,
 		notesContent: string,
 		todoContent: { id: number; content: string }[]
 	) => {
+		setIsSaving(true);
 		contentServices
 			.post("", { date })
 			.then((res) => {
@@ -28,13 +30,19 @@ const NotesCard = () => {
 							console.log("Could not update the content")
 						);
 				}
+				setTimeout(() => {
+					setIsSaving(false);
+				}, 1000);
 			})
-			.catch(() =>
+			.catch(() => {
 				contentServices
 					.post("/new", { date, notesContent, todoContent })
 					.then(() => console.log("Saved Successfully!"))
-					.catch(() => console.log("Could not save the content"))
-			);
+					.catch(() => console.log("Could not save the content"));
+				setTimeout(() => {
+					setIsSaving(false);
+				}, 1000);
+			});
 	};
 
 	const handleDateChange = (value: dayjs.Dayjs | null) => {
@@ -76,12 +84,13 @@ const NotesCard = () => {
 
 	return (
 		<div
-			className={`border-1 flex h-full w-full flex-col items-center gap-4 rounded-md bg-[#202123] px-5 pt-5`}
+			className={`border-1 flex h-full w-full flex-col items-center gap-4 bg-[#202123] px-5 pt-5`}
 		>
 			<div className="relative flex min-w-full flex-row items-center justify-between px-6">
 				<Title title="Notes" />
 				<DateSelector handleDateChange={handleDateChange} />
 				<ToggleManager
+					isSaving={isSaving}
 					onClick={() => {
 						handleClick(date, notesValue, []);
 					}}

@@ -1,19 +1,22 @@
 type ToggleManagerProps = {
 	onClick: () => void;
+	isSaving: boolean;
 };
 
-const ToggleManager = ({ onClick }: ToggleManagerProps) => {
+const ToggleManager = ({ onClick, isSaving }: ToggleManagerProps) => {
 	return (
 		<button
-			className=""
+			disabled={isSaving}
 			onClick={() => {
 				onClick();
 			}}
 		>
 			<div
-				className={`flex items-center justify-center rounded-md px-2 text-xs font-bold text-white sm:text-sm md:text-lg`}
+				className={`flex items-center justify-center rounded-md px-2 text-xs font-bold  sm:text-sm md:text-lg ${
+					isSaving ? "text-[#79c6ff]" : "text-white"
+				}`}
 			>
-				Save
+				{isSaving ? "Wait" : "Save"}
 			</div>
 		</button>
 	);
