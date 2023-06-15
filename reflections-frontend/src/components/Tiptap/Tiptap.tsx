@@ -328,9 +328,11 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 const Tiptap = ({
 	editorValue,
 	setNotesValue,
+	edit,
 }: {
 	editorValue: string;
 	setNotesValue: React.Dispatch<React.SetStateAction<string>>;
+	edit: boolean;
 }) => {
 	const editor = useEditor({
 		extensions: [
@@ -357,11 +359,13 @@ const Tiptap = ({
 			handleChange(html);
 		},
 		content: editorValue,
+		editable: false,
 	});
 
 	useEffect(() => {
 		editor?.commands.setContent(editorValue);
-	}, [editorValue]);
+		editor?.setEditable(edit);
+	}, [editorValue, edit]);
 
 	const handleChange = (newContent: string) => {
 		setNotesValue(newContent);

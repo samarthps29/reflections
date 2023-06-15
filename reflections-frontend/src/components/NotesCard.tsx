@@ -11,6 +11,7 @@ const NotesCard = () => {
 	const [editorValue, setEditorValue] = useState<string>("");
 	const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
 	const [isSaving, setIsSaving] = useState(false);
+	const [edit, setEdit] = useState(false);
 
 	const handleClick = (
 		date: string,
@@ -48,37 +49,52 @@ const NotesCard = () => {
 	const handleDateChange = (value: dayjs.Dayjs | null) => {
 		const dateChanged = value!.format("YYYY-MM-DD");
 		setDate(dateChanged);
-
+		setEdit(false);
+		setEditorValue("<p>Loading...</p>");
 		contentServices
 			.post("", { date: dateChanged })
 			.then((res) => {
-				if (res.data[0].notesContent === "") {
-					setEditorValue("");
-				} else {
-					setEditorValue(res.data[0].notesContent);
-				}
+				setTimeout(() => {
+					if (res.data[0].notesContent === "") {
+						setEditorValue("");
+					} else {
+						setEditorValue(res.data[0].notesContent);
+					}
+					setEdit(true);
+				}, 1000);
 			})
 			.catch(() => {
-				setEditorValue("");
-				console.log("No content for this day yet!");
+				setTimeout(() => {
+					setEditorValue("");
+					setEdit(true);
+					console.log("No content for this day yet!");
+				}, 1000);
 			});
 	};
 
 	useEffect(() => {
 		const dateChanged = dayjs().format("YYYY-MM-DD");
 		setDate(dateChanged);
+		setEdit(false);
+		setEditorValue("<p>Loading...</p>");
 		contentServices
 			.post("", { date: dateChanged })
 			.then((res) => {
-				if (res.data[0].notesContent === "") {
-					setEditorValue("");
-				} else {
-					setEditorValue(res.data[0].notesContent);
-				}
+				setTimeout(() => {
+					if (res.data[0].notesContent === "") {
+						setEditorValue("");
+					} else {
+						setEditorValue(res.data[0].notesContent);
+					}
+					setEdit(true);
+				}, 1000);
 			})
 			.catch(() => {
-				setEditorValue("");
-				console.log("No content for this day yet!");
+				setTimeout(() => {
+					setEditorValue("");
+					setEdit(true);
+					console.log("No content for this day yet!");
+				}, 1000);
 			});
 	}, []);
 
@@ -96,7 +112,11 @@ const NotesCard = () => {
 					}}
 				/>
 			</div>
-			<Tiptap editorValue={editorValue} setNotesValue={setNotesValue} />
+			<Tiptap
+				editorValue={editorValue}
+				setNotesValue={setNotesValue}
+				edit={edit}
+			/>
 		</div>
 	);
 };
