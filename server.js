@@ -38,6 +38,13 @@ app.get("*", (req, res) => {
 
 // connecting to mongoDB
 // and then starting the server
-connectDB().then(() => {
-	app.listen(process.env.PORT);
-});
+const initializeApp = async () => {
+	try {
+		await connectDB();
+		app.listen(process.env.PORT, () => console.log("Server Started"));
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+initializeApp();
