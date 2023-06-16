@@ -254,21 +254,21 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					editor
 						.chain()
 						.focus()
-						.toggleHighlight({ color: "#ff8888" })
+						.toggleHighlight({ color: "#0ec3ac" })
 						.setColor(
-							editor?.isActive("highlight", { color: "#ff8888" })
+							editor?.isActive("highlight", { color: "#0ec3ac" })
 								? ""
 								: "#000000"
 						)
 						.run()
 				}
 				className={`${
-					editor.isActive("highlight", { color: "#ff8888" })
+					editor.isActive("highlight", { color: "#0ec3ac" })
 						? "is-active"
 						: "text-white"
 				} rounded-md border px-2 py-0.5`}
 			>
-				red
+				teal
 			</button>
 			<button
 				onClick={() =>
