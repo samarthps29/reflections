@@ -13,36 +13,46 @@ const NotesCard = () => {
 	const [isSaving, setIsSaving] = useState(false);
 	const [edit, setEdit] = useState(false);
 
-	const handleClick = (
-		date: string,
-		notesContent: string,
-		todoContent: { id: number; content: string }[]
-	) => {
+	const handleClick = (date: string, notesContent: string) => {
 		setIsSaving(true);
 		contentServices
 			.post("", { date })
 			.then((res) => {
-				const id = res.data[0]._id;
-				if (notesContent != "") {
+				if (res.data.length !== 0) {
+					const id = res.data[0]._id;
 					contentServices
 						.put(id, { notesContent })
-						.then(() => console.log("Updated Successfully!"))
-						.catch(() =>
-							console.log("Could not update the content")
-						);
+						.then(() => {
+							setTimeout(() => {
+								setIsSaving(false);
+							}, 1000);
+							console.log("Updated Successfully!");
+						})
+						.catch(() => {
+							setTimeout(() => {
+								setIsSaving(false);
+							}, 1000);
+							console.log("Could not update the content");
+						});
+				} else {
+					contentServices
+						.post("/new", { date, notesContent })
+						.then(() => {
+							setTimeout(() => {
+								setIsSaving(false);
+							}, 1000);
+							console.log("Saved Successfully!");
+						})
+						.catch(() => {
+							setTimeout(() => {
+								setIsSaving(false);
+							}, 1000);
+							console.log("Could not save the content");
+						});
 				}
-				setTimeout(() => {
-					setIsSaving(false);
-				}, 1000);
 			})
 			.catch(() => {
-				contentServices
-					.post("/new", { date, notesContent, todoContent })
-					.then(() => console.log("Saved Successfully!"))
-					.catch(() => console.log("Could not save the content"));
-				setTimeout(() => {
-					setIsSaving(false);
-				}, 1000);
+				console.log("Error");
 			});
 	};
 
@@ -54,21 +64,25 @@ const NotesCard = () => {
 		contentServices
 			.post("", { date: dateChanged })
 			.then((res) => {
-				setTimeout(() => {
-					if (res.data[0].notesContent === "") {
+				if (res.data.length !== 0) {
+					setTimeout(() => {
+						if (res.data[0].notesContent === "") {
+							setEditorValue("");
+						} else {
+							setEditorValue(res.data[0].notesContent);
+						}
+						setEdit(true);
+					}, 1000);
+				} else {
+					setTimeout(() => {
 						setEditorValue("");
-					} else {
-						setEditorValue(res.data[0].notesContent);
-					}
-					setEdit(true);
-				}, 1000);
+						setEdit(true);
+						console.log("No content for this day yet!");
+					}, 1000);
+				}
 			})
 			.catch(() => {
-				setTimeout(() => {
-					setEditorValue("");
-					setEdit(true);
-					console.log("No content for this day yet!");
-				}, 1000);
+				console.log("Error");
 			});
 	};
 
@@ -80,27 +94,31 @@ const NotesCard = () => {
 		contentServices
 			.post("", { date: dateChanged })
 			.then((res) => {
-				setTimeout(() => {
-					if (res.data[0].notesContent === "") {
+				if (res.data.length !== 0) {
+					setTimeout(() => {
+						if (res.data[0].notesContent === "") {
+							setEditorValue("");
+						} else {
+							setEditorValue(res.data[0].notesContent);
+						}
+						setEdit(true);
+					}, 1000);
+				} else {
+					setTimeout(() => {
 						setEditorValue("");
-					} else {
-						setEditorValue(res.data[0].notesContent);
-					}
-					setEdit(true);
-				}, 1000);
+						setEdit(true);
+						console.log("No content for this day yet!");
+					}, 1000);
+				}
 			})
 			.catch(() => {
-				setTimeout(() => {
-					setEditorValue("");
-					setEdit(true);
-					console.log("No content for this day yet!");
-				}, 1000);
+				console.log("Error");
 			});
 	}, []);
 
 	return (
 		<div
-			className={`border-1 flex h-full w-full flex-col items-center gap-4 bg-[#202123] px-5 pt-5`}
+			className={`border-1 flex h-full w-full flex-col items-center gap-4 bg-[#27282b] px-5 pt-5`}
 		>
 			<div className="relative flex min-w-full flex-row items-center justify-between px-6">
 				<Title title="Notes" />
@@ -108,7 +126,7 @@ const NotesCard = () => {
 				<ToggleManager
 					isSaving={isSaving}
 					onClick={() => {
-						handleClick(date, notesValue, []);
+						handleClick(date, notesValue);
 					}}
 				/>
 			</div>

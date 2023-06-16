@@ -13,10 +13,6 @@ const contentSchema = mongoose.Schema({
 		type: String,
 		required: false,
 	},
-	todoContent: {
-		type: [{ id: String, content: String, height: Number, done: Boolean }],
-		required: false,
-	},
 });
 
 module.exports = mongoose.model("Content", contentSchema);

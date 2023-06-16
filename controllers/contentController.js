@@ -6,23 +6,18 @@ const getContent = asyncHandler(async (req, res) => {
 	try {
 		let content = [];
 		content = await Content.find({ userID: req.user.id, date });
-		if (content.length === 0) {
-			return res.status(404).json({ message: "No Content Found" });
-		} else {
-			return res.status(200).json(content);
-		}
+		return res.status(200).json(content);
 	} catch (err) {
 		console.log("Error");
 	}
 });
 
 const createContent = asyncHandler(async (req, res) => {
-	const { date, notesContent, todoContent } = req.body;
+	const { date, notesContent } = req.body;
 	const createdContent = await Content.create({
 		userID: req.user.id,
 		date,
 		notesContent,
-		todoContent,
 	});
 	res.status(200).json({ message: "Content Created Succesfully" });
 });

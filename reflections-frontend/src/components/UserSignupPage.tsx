@@ -10,7 +10,7 @@ const UserSignupPage = () => {
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
 	return (
-		<div className={`flex items-center bg-[#0F0E0E]`}>
+		<div className={`flex items-center bg-[#1d1d1d]`}>
 			<div className="flex w-full flex-col items-center pr-2 sm:w-1/3">
 				<div className="w-2/3">
 					<form
@@ -74,7 +74,7 @@ const UserSignupPage = () => {
 								spellCheck={false}
 							/>
 							<button
-								className="mt-9 w-full rounded-md bg-[#d799b4] px-3 py-2 font-serif font-bold text-black"
+								className="mt-9 w-full rounded-md bg-[#ada1e1] px-3 py-2 font-serif font-bold text-black"
 								type="submit"
 							>
 								Sign up
@@ -86,8 +86,7 @@ const UserSignupPage = () => {
 			<div
 				className={`relative flex h-screen w-0 overflow-hidden sm:w-2/3 ${styles.bgi2} items-center justify-center`}
 			>
-				<div className="absolute left-0 top-0 h-full w-full border-l-4 border-[#0F0E0E] border-opacity-90" />
-				<div className="flex h-1/3 w-2/3 items-center justify-center rounded-xl bg-stone-300 bg-opacity-10 text-center font-inter text-3xl/[30px] font-extrabold tracking-tighter text-white backdrop-blur-2xl md:text-4xl/[40px] xl:text-5xl/[50px] ">
+				<div className="flex h-1/3 w-2/3 items-center justify-center rounded-xl bg-stone-100 bg-opacity-50 text-center font-inter text-3xl/[30px] font-extrabold tracking-tighter text-black backdrop-blur-2xl md:text-4xl/[40px] xl:text-5xl/[50px] ">
 					<p className="px-5">
 						Simplicity Redefined: Embrace the Beauty of Minimalist
 						Notes and Diary
