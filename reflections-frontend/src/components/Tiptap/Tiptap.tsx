@@ -372,7 +372,7 @@ const Tiptap = ({
 	};
 
 	return (
-		<div className="customScroll -mt-2 flex h-full w-full resize-none items-center justify-center overflow-auto">
+		<div className="customScroll -mt-4 flex h-full w-full resize-none items-center justify-center overflow-auto">
 			<div className="flex h-full resize-none flex-col gap-5 rounded-xl p-5 text-lg text-white">
 				<MenuBar editor={editor} />
 				<EditorContent

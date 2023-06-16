@@ -1,11 +1,17 @@
 import { ConfigProvider, DatePicker, theme } from "antd";
 import dayjs from "dayjs";
+import { useRef } from "react";
 
 type DateSelectorProps = {
 	handleDateChange: (e: dayjs.Dayjs | null) => void;
 };
 
 const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
+	const datePickerRef = useRef<any>(null);
+	const handleDateSelect = (date: dayjs.Dayjs | null) => {
+		handleDateChange(date);
+		datePickerRef.current?.blur();
+	};
 	return (
 		<ConfigProvider
 			theme={{
@@ -15,17 +21,20 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 					colorPrimary: "black",
 					colorTextBase: "white",
 					fontSize: 17,
+					colorBgElevated: "#1e1f22",
 				},
 			}}
 		>
 			<DatePicker
-				className="scale-75 rounded-lg border border-0 border-[#222222] bg-transparent font-bold hover:translate-y-0 hover:border-[#222222] sm:scale-90 md:scale-100"
-				style={{ width: 123 }}
+				className="scale-75 rounded-lg bg-transparent font-bold hover:translate-y-0 sm:scale-90 md:scale-100"
+				style={{ width: 129 }}
 				defaultValue={dayjs()}
 				format="DD-MMM-YYYY"
-				onChange={(date) => handleDateChange(date)}
+				onChange={handleDateSelect}
+				ref={datePickerRef}
 				suffixIcon={null}
 				clearIcon={null}
+				bordered={false}
 			/>
 		</ConfigProvider>
 	);
