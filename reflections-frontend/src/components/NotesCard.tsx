@@ -25,13 +25,13 @@ const NotesCard = () => {
 						.then(() => {
 							setTimeout(() => {
 								setIsSaving(false);
-							}, 600);
+							}, 200);
 							console.log("Updated Successfully!");
 						})
 						.catch(() => {
 							setTimeout(() => {
 								setIsSaving(false);
-							}, 600);
+							}, 200);
 							console.log("Could not update the content");
 						});
 				} else {
@@ -40,13 +40,13 @@ const NotesCard = () => {
 						.then(() => {
 							setTimeout(() => {
 								setIsSaving(false);
-							}, 600);
+							}, 200);
 							console.log("Saved Successfully!");
 						})
 						.catch(() => {
 							setTimeout(() => {
 								setIsSaving(false);
-							}, 600);
+							}, 200);
 							console.log("Could not save the content");
 						});
 				}
@@ -72,13 +72,13 @@ const NotesCard = () => {
 							setEditorValue(res.data[0].notesContent);
 						}
 						setEdit(true);
-					}, 600);
+					}, 200);
 				} else {
 					setTimeout(() => {
 						setEditorValue("");
 						setEdit(true);
 						console.log("No content for this day yet!");
-					}, 600);
+					}, 200);
 				}
 			})
 			.catch(() => {
@@ -102,13 +102,13 @@ const NotesCard = () => {
 							setEditorValue(res.data[0].notesContent);
 						}
 						setEdit(true);
-					}, 600);
+					}, 200);
 				} else {
 					setTimeout(() => {
 						setEditorValue("");
 						setEdit(true);
 						console.log("No content for this day yet!");
-					}, 600);
+					}, 200);
 				}
 			})
 			.catch(() => {
