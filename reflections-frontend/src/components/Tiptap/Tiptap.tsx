@@ -316,6 +316,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				className="rounded-md border px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"
 				onClick={() => {
 					userServices.get("/logout");
+					localStorage.removeItem("accessToken");
 					navigate("/login");
 				}}
 			>
