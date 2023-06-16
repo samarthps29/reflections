@@ -6,9 +6,6 @@ const dotenv = require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-// connecting to mongoDB
-connectDB();
-
 // middlewares
 app.use(cookieParser());
 app.use((req, res, next) => {
@@ -39,5 +36,8 @@ app.get("*", (req, res) => {
 	);
 });
 
-// starting the server
-app.listen(process.env.PORT || 5001);
+// connecting to mongoDB
+// and then starting the server
+connectDB().then(() => {
+	app.listen(process.env.PORT);
+});
