@@ -18,10 +18,13 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 				algorithm: theme.darkAlgorithm,
 				token: {
 					colorInfo: "white",
-					colorPrimary: "black",
+					colorPrimary: "#b9b0ff",
 					colorTextBase: "white",
 					fontSize: 17,
 					colorBgElevated: "#1e1f22",
+					lineWidth: 0,
+					padding: 18,
+					paddingXS: 16,
 				},
 			}}
 		>
@@ -35,6 +38,7 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 				suffixIcon={null}
 				clearIcon={null}
 				bordered={false}
+				showToday={false}
 			/>
 		</ConfigProvider>
 	);
