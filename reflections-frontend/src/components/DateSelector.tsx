@@ -19,7 +19,8 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 				token: {
 					colorInfo: "white",
 					colorPrimary: "#b9b0ff",
-					colorTextBase: "white",
+					// colorTextBase: "white",
+					colorText: "#f4f4f4",
 					fontSize: 17,
 					colorBgElevated: "#1e1f22",
 					lineWidth: 0,
