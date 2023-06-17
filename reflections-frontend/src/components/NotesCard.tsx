@@ -118,9 +118,9 @@ const NotesCard = () => {
 
 	return (
 		<div
-			className={`border-1 flex h-full w-full flex-col items-center gap-4 bg-[#27282b] px-5 pt-5`}
+			className={`flex h-full w-full flex-col items-center gap-4 bg-[#27282b] px-5 pt-5`}
 		>
-			<div className="relative flex min-w-full flex-row items-center justify-between px-6">
+			<div className="relative flex min-w-full flex-row items-center justify-between px-2 md:px-6">
 				<Title title="Notes" />
 				<DateSelector handleDateChange={handleDateChange} />
 				<ToggleManager

@@ -30,7 +30,7 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 			}}
 		>
 			<DatePicker
-				className="scale-75 rounded-lg bg-transparent font-bold hover:translate-y-0 sm:scale-90 md:scale-100"
+				className="rounded-lg bg-transparent font-bold hover:translate-y-0 scale-90 md:scale-100"
 				style={{ width: 129 }}
 				defaultValue={dayjs()}
 				format="DD-MMM-YYYY"

@@ -373,13 +373,13 @@ const Tiptap = ({
 	};
 
 	return (
-		<div className="customScroll -mt-4 flex h-full w-full resize-none items-center overflow-auto">
-			<div className="flex h-full w-full resize-none flex-col gap-5 rounded-xl p-5 text-lg text-white">
+		<div className="customScroll -mt-4 flex h-full w-full resize-none items-center overflow-auto pt-1.5">
+			<div className="flex h-full w-full resize-none flex-col gap-5 rounded-xl px-1 py-5 text-lg text-white md:px-5">
 				<MenuBar editor={editor} />
 				<EditorContent
 					spellCheck={false}
 					editor={editor}
-					className="customScroll overflow-auto px-3 pb-5"
+					className="customScroll overflow-auto px-3 pb-5 pt-2"
 				/>
 			</div>
 		</div>

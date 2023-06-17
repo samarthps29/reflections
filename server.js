@@ -25,6 +25,9 @@ app.use(express.json());
 // setting routes
 app.use("/api/user", require("./routes/userRoute"));
 app.use("/api/content", require("./routes/contentRoute"));
+app.get("/health", (req, res) => {
+	res.sendStatus(200);
+});
 
 app.use(express.static(path.join(__dirname, "./reflections-frontend/dist")));
 app.get("*", (req, res) => {

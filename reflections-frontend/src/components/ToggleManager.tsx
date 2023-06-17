@@ -12,7 +12,7 @@ const ToggleManager = ({ onClick, isSaving }: ToggleManagerProps) => {
 			}}
 		>
 			<div
-				className={`flex items-center justify-center rounded-md px-2 text-xs font-bold  sm:text-sm md:text-lg ${
+				className={`flex items-center justify-center rounded-md px-2 font-bold      md:text-lg ${
 					isSaving ? "text-[#79c6ff]" : "text-white"
 				}`}
 			>
