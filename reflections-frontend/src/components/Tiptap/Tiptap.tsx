@@ -38,7 +38,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 			>
 				italic
 			</button>
-			<button
+			{/* <button
 				onClick={() => editor.chain().focus().toggleStrike().run()}
 				disabled={!editor.can().chain().focus().toggleStrike().run()}
 				className={`${
@@ -46,7 +46,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				} rounded-md border  px-2 py-0.5`}
 			>
 				strike
-			</button>
+			</button> */}
 			<button
 				onClick={() => editor.chain().focus().toggleCode().run()}
 				disabled={!editor.can().chain().focus().toggleCode().run()}
@@ -254,6 +254,27 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					editor
 						.chain()
 						.focus()
+						.toggleHighlight({ color: "#8ce99a" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#8ce99a" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
+				className={`${
+					editor.isActive("highlight", { color: "#8ce99a" })
+						? "is-active"
+						: "text-white"
+				} rounded-md border px-2 py-0.5`}
+			>
+				green
+			</button>
+			<button
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
 						.toggleHighlight({ color: "#0ec3ac" })
 						.setColor(
 							editor?.isActive("highlight", { color: "#0ec3ac" })
@@ -270,7 +291,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 			>
 				teal
 			</button>
-			<button
+			{/* <button
 				onClick={() =>
 					editor
 						.chain()
@@ -290,28 +311,8 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				} rounded-md border px-2 py-0.5`}
 			>
 				yellow
-			</button>
-			<button
-				onClick={() =>
-					editor
-						.chain()
-						.focus()
-						.toggleHighlight({ color: "#8ce99a" })
-						.setColor(
-							editor?.isActive("highlight", { color: "#8ce99a" })
-								? ""
-								: "#000000"
-						)
-						.run()
-				}
-				className={`${
-					editor.isActive("highlight", { color: "#8ce99a" })
-						? "is-active"
-						: "text-white"
-				} rounded-md border px-2 py-0.5`}
-			>
-				green
-			</button>
+			</button> */}
+
 			<button
 				className="rounded-md border px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"
 				onClick={() => {
@@ -379,7 +380,7 @@ const Tiptap = ({
 				<EditorContent
 					spellCheck={false}
 					editor={editor}
-					className="customScroll overflow-auto px-3 pb-5 pt-2"
+					className="customScroll overflow-auto px-3 pb-52 pt-2"
 				/>
 			</div>
 		</div>
