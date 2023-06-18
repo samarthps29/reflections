@@ -22,7 +22,7 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 		<div className="flex flex-row items-center justify-center">
 			<button
 				className="-mr-1 opacity-50"
-				style={{ marginTop: "0.13em" }}
+				style={{ marginTop: "0.12em" }}
 				onClick={() => handleDateSelect(currDate.add(-1, "day"))}
 			>
 				<LeftIcon />
@@ -46,7 +46,7 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 				<DatePicker
 					className="scale-90 rounded-lg bg-transparent font-bold hover:translate-y-0 md:scale-100"
 					style={{ width: 129 }}
-					defaultValue={dayjs()}
+					value={currDate}
 					format="DD-MMM-YYYY"
 					onChange={handleDateSelect}
 					ref={datePickerRef}
@@ -58,7 +58,7 @@ const DateSelector = ({ handleDateChange }: DateSelectorProps) => {
 			</ConfigProvider>
 			<button
 				className="opacity-50"
-				style={{ marginTop: "0.13em", marginLeft: "-.5rem" }}
+				style={{ marginTop: "0.12em", marginLeft: "-.6rem" }}
 				onClick={() => handleDateSelect(currDate.add(+1, "day"))}
 			>
 				<RightIcon />
