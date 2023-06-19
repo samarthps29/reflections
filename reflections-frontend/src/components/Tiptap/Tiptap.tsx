@@ -1,8 +1,8 @@
 import { Color } from "@tiptap/extension-color";
-import Document from "@tiptap/extension-document";
+// import Document from "@tiptap/extension-document";
 import Highlight from "@tiptap/extension-highlight";
 import ListItem from "@tiptap/extension-list-item";
-import Paragraph from "@tiptap/extension-paragraph";
+// import Paragraph from "@tiptap/extension-paragraph";
 import TextStyle from "@tiptap/extension-text-style";
 import Typography from "@tiptap/extension-typography";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
@@ -233,27 +233,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					editor
 						.chain()
 						.focus()
-						.toggleHighlight({ color: "#74c0fc" })
-						.setColor(
-							editor?.isActive("highlight", { color: "#74c0fc" })
-								? ""
-								: "#000000"
-						)
-						.run()
-				}
-				className={`${
-					editor.isActive("highlight", { color: "#74c0fc" })
-						? "is-active"
-						: "text-white"
-				} rounded-md border px-2 py-0.5`}
-			>
-				blue
-			</button>
-			<button
-				onClick={() =>
-					editor
-						.chain()
-						.focus()
 						.toggleHighlight({ color: "#8ce99a" })
 						.setColor(
 							editor?.isActive("highlight", { color: "#8ce99a" })
@@ -270,6 +249,28 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 			>
 				green
 			</button>
+			<button
+				onClick={() =>
+					editor
+						.chain()
+						.focus()
+						.toggleHighlight({ color: "#74c0fc" })
+						.setColor(
+							editor?.isActive("highlight", { color: "#74c0fc" })
+								? ""
+								: "#000000"
+						)
+						.run()
+				}
+				className={`${
+					editor.isActive("highlight", { color: "#74c0fc" })
+						? "is-active"
+						: "text-white"
+				} rounded-md border px-2 py-0.5`}
+			>
+				blue
+			</button>
+
 			<button
 				onClick={() =>
 					editor
@@ -338,8 +339,8 @@ const Tiptap = ({
 }) => {
 	const editor = useEditor({
 		extensions: [
-			Document,
-			Paragraph,
+			// Document,
+			// Paragraph,
 			Typography,
 			Highlight.configure({ multicolor: true }),
 			Color.configure({ types: [TextStyle.name, ListItem.name] }),
