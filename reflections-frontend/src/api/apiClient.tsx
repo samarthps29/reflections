@@ -4,11 +4,12 @@ import { regenerateToken } from "../utility/utility";
 
 const publicApiClient = axios.create({
 	baseURL: "",
-	withCredentials: true,
+	// baseURL: "http://localhost:5000",
 });
 
 const privateApiClient = axios.create({
 	baseURL: "",
+	// baseURL: "http://localhost:5000",
 	withCredentials: true,
 });
 
