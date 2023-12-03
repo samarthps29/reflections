@@ -41,7 +41,11 @@ const NotesCard = () => {
 				});
 		} else {
 			contentServices
-				.post("/new", { date: dayjs().valueOf(), title, notesContent })
+				.post("/new", {
+					date: dayjs().valueOf(),
+					title,
+					notesContent,
+				})
 				.then(() => {
 					// setTimeout(() => {
 					// 	setIsSaving(false);
