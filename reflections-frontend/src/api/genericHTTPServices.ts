@@ -16,6 +16,9 @@ class HTTPServices {
 	put(id: string, entity: any) {
 		return this.apiClient.put(this.endpoint + "/" + id, entity);
 	}
+	delete(id: string) {
+		return this.apiClient.delete(this.endpoint + "/" + id);
+	}
 }
 
 const create = (endpoint: string, apiClient: AxiosInstance) => {

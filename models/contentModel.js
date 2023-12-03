@@ -5,9 +5,13 @@ const contentSchema = mongoose.Schema({
 		required: [true, "User ID is required"],
 		ref: "User",
 	},
+	title: {
+		type: String,
+		required: [true, "title is required"],
+	},
 	date: {
 		type: mongoose.Schema.Types.Date,
-		required: [true, "Date is required"],
+		required: [false],
 	},
 	notesContent: {
 		type: String,

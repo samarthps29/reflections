@@ -3,12 +3,14 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+let refreshTokens = [];
+
 const generateAccessToken = (user) => {
 	return jwt.sign(
 		{ id: user.id, userName: user.userName },
 		process.env.ACCESS_SECRET_KEY,
 		{
-			expiresIn: "3h",
+			expiresIn: "1d",
 		}
 	);
 };
@@ -26,6 +28,8 @@ const generateRefreshToken = (user) => {
 const generateNewToken = (req, res) => {
 	const refreshToken = req.cookies.refreshToken;
 	if (!refreshToken) res.status(400).json({ message: "Not authenticated" });
+	else if (!refreshTokens.includes(refreshToken))
+		res.status(400).json({ message: "Refresh token is not valid" });
 	else {
 		jwt.verify(
 			refreshToken,
@@ -48,17 +52,17 @@ const userLogin = asyncHandler(async (req, res) => {
 		res.status(400).json({ message: "All fields are mandatory" });
 	}
 	const user = await User.findOne({ userName });
+	// console.log(user);
+	// TODO: need to check if user does not exists and is null
 	if (bcrypt.compare(password, user.password)) {
 		const accessToken = generateAccessToken(user);
 		const refreshToken = generateRefreshToken(user);
 		// Sending the refresh token as HTTP only cookie
-		const oneWeekInSeconds = 7 * 24 * 60 * 60; // 1 week in seconds
-		const expirationDate = new Date(Date.now() + oneWeekInSeconds * 1000); // Calculat expiration date
+		refreshTokens.push(refreshToken);
 		res.cookie("refreshToken", refreshToken, {
 			httpOnly: true,
 			sameSite: "None",
 			secure: true,
-			expires: expirationDate,
 		});
 		// Sending the access token as JSON Object
 		res.status(200).json({ accessToken });

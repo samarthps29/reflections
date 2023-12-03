@@ -86,10 +86,10 @@ const UserSignupPage = () => {
 			<div
 				className={`relative flex h-screen w-0 overflow-hidden sm:w-2/3 ${styles.bgi2} items-center justify-center`}
 			>
-				<div className="flex h-1/3 w-2/3 items-center justify-center rounded-xl bg-stone-900 bg-opacity-50 text-center font-inter text-3xl/[30px] font-extrabold tracking-tighter text-white backdrop-blur-2xl md:text-4xl/[40px] xl:text-5xl/[50px] ">
+				<div className="flex h-1/3 w-1/2 items-center justify-center rounded-xl bg-stone-900 bg-opacity-50 text-center font-inter text-3xl/[30px] font-extrabold tracking-tighter text-white backdrop-blur-2xl md:text-4xl/[40px] xl:text-5xl/[50px] ">
 					<p className="px-5">
-						Simplicity Redefined: Embrace the Beauty of Minimalist
-						Notes and Diary
+						Simplicity Redefined:
+						<br /> Embrace the Beauty of Minimalist Notes
 					</p>
 				</div>
 			</div>

@@ -319,7 +319,6 @@ const Tiptap = ({
 		],
 		onUpdate: ({ editor }) => {
 			const html = editor.getHTML();
-			console.log(html);
 			handleChange(html);
 		},
 		content: editorValue,
@@ -338,17 +337,18 @@ const Tiptap = ({
 	};
 
 	return (
-		<div className="flex min-h-screen w-full flex-col gap-5 bg-[#1f1f1f] ">
+		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1f1f1f]">
 			<MenuBar editor={editor} />
 			<input
-				className="mx-8 mt-24 flex w-fit border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
+				className="mx-8 mt-24 flex w-1/4 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
 				placeholder="title goes here"
 				ref={title}
 			/>
 			<EditorContent
 				spellCheck={false}
 				editor={editor}
-				className="customScroll mx-8 mb-12 mt-2 text-lg leading-6 text-[#bcbcbc]"
+				// text-[#bcbcbc]
+				className="customScroll mx-8 mb-12 mt-2 font-inter text-lg leading-6 text-[#c0c0c0]"
 			/>
 		</div>
 	);
