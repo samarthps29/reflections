@@ -101,7 +101,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 						editor.isActive("bulletList") ? "is-active" : ""
 					} rounded-md    px-2 py-0.5 `}
 				>
-					bullet list
+					list
 				</button>
 				{/* <button
 					onClick={() =>
@@ -142,20 +142,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					rule
 				</button>
 				<button
-					onClick={() => editor.chain().focus().undo().run()}
-					disabled={!editor.can().chain().focus().undo().run()}
-					className="rounded-md    px-2 py-0.5  "
-				>
-					undo
-				</button>
-				<button
-					onClick={() => editor.chain().focus().redo().run()}
-					disabled={!editor.can().chain().focus().redo().run()}
-					className="rounded-md   px-2 py-0.5  "
-				>
-					redo
-				</button>
-				<button
 					onClick={() =>
 						editor
 							.chain()
@@ -177,8 +163,23 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					}
 				rounded-md   px-2 py-0.5 `}
 				>
-					purple
+					highlight
 				</button>
+				<button
+					onClick={() => editor.chain().focus().undo().run()}
+					disabled={!editor.can().chain().focus().undo().run()}
+					className="rounded-md    px-2 py-0.5  "
+				>
+					undo
+				</button>
+				<button
+					onClick={() => editor.chain().focus().redo().run()}
+					disabled={!editor.can().chain().focus().redo().run()}
+					className="rounded-md   px-2 py-0.5  "
+				>
+					redo
+				</button>
+
 				{/* <button
 					onClick={() =>
 						editor

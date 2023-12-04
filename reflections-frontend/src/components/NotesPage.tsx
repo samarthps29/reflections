@@ -24,38 +24,47 @@ const NotesPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSaving, setIsSaving] = useState("Save");
 	const [confirmDelete, setConfirmDelete] = useState(false);
+	const [confirmSave, setConfirmSave] = useState(false);
+	const [_, setCurrNoteValue] = useState("");
 
-	const handleClick = (title: string, notesContent: string) => {
+	const handleClick = (
+		title: string,
+		notesContent: string,
+		mover: Boolean = false
+	) => {
 		if (!title) return;
 		const saveTime: Dayjs = dayjs();
 		if (currNoteID !== "") {
 			setIsSaving("Saving");
 			contentServices
 				.put(currNoteID, {
-					date: dayjs().valueOf(),
+					date: saveTime.valueOf(),
 					title,
 					notesContent,
 				})
 				.then(() => {
-					setLastUpdate(saveTime);
-					// setSearchResults((prev) => {
-					// 	return prev.map((item) => {
-					// 		if (item._id === currNoteID) {
-					// 			return {
-					// 				_id: currNoteID,
-					// 				notesContent,
-					// 				title,
-					// 				date: lastUpdate,
-					// 			};
-					// 		} else return item;
-					// 	});
-					// });
+					// mover && console.log("from a mover ");
+					!mover && setLastUpdate(saveTime);
+					!mover && setCurrNoteValue(notesContent);
+					setRecentResults((prev) => {
+						return prev.map((item) => {
+							if (item._id === currNoteID) {
+								return {
+									_id: currNoteID,
+									notesContent,
+									title,
+									date: saveTime,
+								};
+							} else return item;
+						});
+					});
+					orderRecentResults();
 					setTimeout(() => {
 						setIsSaving("Save Successful!");
 						setTimeout(() => {
 							setIsSaving("Save");
-						}, 2000);
-					}, 2000);
+						}, 1000);
+					}, 1000);
 					console.log("Updated Successfully!");
 				})
 				.catch(() => {
@@ -63,38 +72,42 @@ const NotesPage = () => {
 						setIsSaving("Save Unsuccessful!");
 						setTimeout(() => {
 							setIsSaving("Save");
-						}, 2000);
-					}, 2000);
+						}, 1000);
+					}, 1000);
 					console.log("Could not update the content");
 				});
 		} else {
 			setIsSaving("Saving");
 			contentServices
 				.post("/new", {
-					date: dayjs().valueOf(),
+					date: saveTime.valueOf(),
 					title,
 					notesContent,
 				})
 				.then((res) => {
-					setCurrNoteID(res.data.id);
-					setLastUpdate(saveTime);
-					// setSearchResults((prev) => {
-					// 	return [
-					// 		...prev,
-					// 		{
-					// 			_id: currNoteID,
-					// 			notesContent,
-					// 			title,
-					// 			date: lastUpdate,
-					// 		},
-					// 	];
-					// });
+					// mover && console.log("from a mover ");
+					!mover && setCurrNoteID(res.data.id);
+					!mover && setCurrNoteValue(notesContent);
+					!mover && setLastUpdate(saveTime);
+					setRecentResults((prev) => {
+						return [
+							...prev,
+							{
+								_id: res.data.id,
+								notesContent,
+								title,
+								date: saveTime,
+							},
+						];
+					});
+					orderRecentResults();
+
 					setTimeout(() => {
 						setIsSaving("Save Successful!");
 						setTimeout(() => {
 							setIsSaving("Save");
-						}, 2000);
-					}, 2000);
+						}, 1000);
+					}, 1000);
 					console.log("Saved Successfully!");
 				})
 				.catch(() => {
@@ -102,8 +115,8 @@ const NotesPage = () => {
 						setIsSaving("Save Unsuccessful!");
 						setTimeout(() => {
 							setIsSaving("Save");
-						}, 2000);
-					}, 2000);
+						}, 1000);
+					}, 1000);
 					console.log("Could not save the content");
 				});
 		}
@@ -113,13 +126,14 @@ const NotesPage = () => {
 		contentServices
 			.delete(currNoteID)
 			.then(() => {
+				setCurrNoteValue("");
 				setEditorValue("");
 				setChangeNote(true);
 				title.current!.value = "";
 				setLastUpdate(null);
-				console.log(currNoteID);
-				setSearchResults(
-					searchResults.filter((item) => {
+				// console.log(currNoteID);
+				setRecentResults(
+					recentResults.filter((item) => {
 						if (item._id !== currNoteID) return true;
 						else return false;
 					})
@@ -133,13 +147,39 @@ const NotesPage = () => {
 		setConfirmDelete(false);
 	}
 
+	function checkNoteSaved() {
+		// console.log("value of confirm save is ", confirmSave);
+		return new Promise((resolve) => {
+			const checkInterval = setInterval(() => {
+				let x: Boolean = true;
+				setConfirmSave((prev) => {
+					// console.log("first value of prev is ", prev);
+					x = prev;
+					return prev;
+				});
+
+				if (!x) {
+					// console.log("yesss");
+					clearInterval(checkInterval);
+					resolve("resolve confirmed");
+				}
+			}, 100);
+		});
+	}
+
+	function orderRecentResults() {
+		setRecentResults((prev) => {
+			return prev.sort((a, b) => {
+				return dayjs(b.date!).valueOf() - dayjs(a.date!).valueOf();
+			});
+		});
+	}
+
 	useEffect(() => {
 		contentServices
 			.get("/recents")
 			.then((res) => {
-				console.log(res.data[0]);
 				setRecentResults(res.data);
-				// setClearStatus(false);
 			})
 			.catch(() => {
 				setRecentResults([]);
@@ -150,7 +190,10 @@ const NotesPage = () => {
 		<div
 			className="min-w-screen oveerflow-hidden flex h-screen justify-center"
 			onKeyDown={(e) => {
-				if (e.key === "Escape") setConfirmDelete(false);
+				if (e.key === "Escape") {
+					setConfirmDelete(false);
+					setConfirmSave(false);
+				}
 			}}
 		>
 			{confirmDelete && (
@@ -172,6 +215,36 @@ const NotesPage = () => {
 					</div>
 				</div>
 			)}
+			{confirmSave && (
+				<div className="text-md fixed bottom-10 right-4 flex flex-col justify-center gap-3 rounded-lg bg-[#444444] px-4 py-3 font-semibold text-[#e3e3e3]">
+					Changes made to the note are not saved
+					<div className="flex justify-end gap-2 font-semibold">
+						<button
+							className="rounded-md bg-[#292929] px-2 py-[5px] hover:bg-[#FF6969] hover:text-black"
+							onClick={() => {
+								setConfirmSave(false);
+							}}
+						>
+							Discard
+						</button>
+						<button
+							className="rounded-md bg-[#292929] px-2 py-[5px] hover:bg-[#8de86b] hover:text-black"
+							onClick={() => {
+								if (title.current?.value) {
+									handleClick(
+										title.current?.value,
+										editorValue,
+										true
+									);
+								}
+								setConfirmSave(false);
+							}}
+						>
+							Save
+						</button>
+					</div>
+				</div>
+			)}
 			{showSearch && (
 				<div className="customScroll flex h-full w-1/4 flex-col items-center overflow-auto border-r-[1px] border-[#515151] bg-[#1f1f1f] pb-12">
 					<input
@@ -189,7 +262,6 @@ const NotesPage = () => {
 											title: searchInput.current?.value,
 										})
 										.then((res) => {
-											console.log(res.data[0]);
 											setIsLoading(false);
 											setSearchResults(res.data);
 										})
@@ -202,7 +274,7 @@ const NotesPage = () => {
 						}}
 					/>
 					<div className="flex h-full w-full flex-col items-center">
-						<div className="items-startmb flex h-full w-11/12 flex-col">
+						<div className="flex h-full w-11/12 flex-col items-start">
 							<p className="mb-2 mt-4 text-sm text-[#a1a1a1]">
 								<button
 									className={`${
@@ -228,22 +300,81 @@ const NotesPage = () => {
 								searchResults.map((item) => {
 									return (
 										<div
-											className="mb-3 w-full items-start justify-center rounded-lg bg-[#444444] px-2 py-2"
+											className={`mb-3 w-full items-start justify-center rounded-lg ${
+												currNoteID === item._id
+													? "bg-[#4b4b4b]"
+													: "bg-[#363636]"
+											} px-2 py-2`}
 											key={item._id}
 											onClick={() => {
-												console.log("div clicked");
-												title.current!.value =
-													item.title;
-												setEditorValue(
-													item.notesContent
-												);
-												setCurrNoteID(item._id);
-												setChangeNote(true);
-												setLastUpdate(() => {
-													if (item.date)
-														return dayjs(item.date);
-													else return null;
+												let x: string = "",
+													y: string = "";
+												setCurrNoteValue((prev) => {
+													x = prev;
+													return prev;
 												});
+												setEditorValue((prev) => {
+													y = prev;
+													return prev;
+												});
+												if (x !== y) {
+													// console.log(
+													// 	"values differ"
+													// );
+													setConfirmSave(true);
+													checkNoteSaved().then(
+														() => {
+															// console.log(
+															// 	"dialog box appears"
+															// );
+															title.current!.value =
+																item.title;
+															setEditorValue(
+																item.notesContent
+															);
+															setCurrNoteValue(
+																item.notesContent
+															);
+															setCurrNoteID(
+																item._id
+															);
+															setChangeNote(true);
+															setLastUpdate(
+																() => {
+																	if (
+																		item.date
+																	)
+																		return dayjs(
+																			item.date
+																		);
+																	else
+																		return null;
+																}
+															);
+															// console.log(
+															// 	"Dialog box removed"
+															// );
+														}
+													);
+												} else {
+													title.current!.value =
+														item.title;
+													setEditorValue(
+														item.notesContent
+													);
+													setCurrNoteValue(
+														item.notesContent
+													);
+													setCurrNoteID(item._id);
+													setChangeNote(true);
+													setLastUpdate(() => {
+														if (item.date)
+															return dayjs(
+																item.date
+															);
+														else return null;
+													});
+												}
 											}}
 										>
 											<p className="text-[#e5e2e2]">
@@ -259,38 +390,102 @@ const NotesPage = () => {
 									);
 								})}
 							{selectedOption === 0 &&
-								recentResults.map((item) => {
-									return (
-										<div
-											className="mb-3 w-full items-start justify-center rounded-lg bg-[#444444] px-2 py-2"
-											key={item._id}
-											onClick={() => {
-												console.log("div clicked");
-												title.current!.value =
-													item.title;
-												setEditorValue(
-													item.notesContent
-												);
-												setCurrNoteID(item._id);
-												setChangeNote(true);
-												setLastUpdate(() => {
-													if (item.date)
-														return dayjs(item.date);
-													else return null;
-												});
-											}}
-										>
-											<p className="text-[#e5e2e2]">
-												{item.title}
-											</p>
-											<p className="text-[#bcbcbc]">
-												Last Edited :{" "}
-												{dayjs(item.date).format(
-													"DD-MMM, HH:mm"
-												)}
-											</p>
-										</div>
-									);
+								recentResults.map((item, index) => {
+									if (index < 5)
+										return (
+											<div
+												className={`mb-3 w-full items-start justify-center rounded-lg ${
+													currNoteID === item._id
+														? "bg-[#4b4b4b]"
+														: "bg-[#333333]"
+												} px-2 py-2`}
+												key={item._id}
+												onClick={() => {
+													let x: string = "",
+														y: string = "";
+													setCurrNoteValue((prev) => {
+														x = prev;
+														return prev;
+													});
+													setEditorValue((prev) => {
+														y = prev;
+														return prev;
+													});
+
+													if (x !== y) {
+														// console.log(
+														// 	"values differ"
+														// );
+														setConfirmSave(true);
+														checkNoteSaved().then(
+															() => {
+																// console.log(
+																// 	"dialog box appears"
+																// );
+																title.current!.value =
+																	item.title;
+																setEditorValue(
+																	item.notesContent
+																);
+																setCurrNoteValue(
+																	item.notesContent
+																);
+																setCurrNoteID(
+																	item._id
+																);
+																setChangeNote(
+																	true
+																);
+																setLastUpdate(
+																	() => {
+																		if (
+																			item.date
+																		)
+																			return dayjs(
+																				item.date
+																			);
+																		else
+																			return null;
+																	}
+																);
+
+																// console.log(
+																// 	"Dialog box removed"
+																// );
+															}
+														);
+													} else {
+														title.current!.value =
+															item.title;
+														setEditorValue(
+															item.notesContent
+														);
+														setCurrNoteValue(
+															item.notesContent
+														);
+														setCurrNoteID(item._id);
+														setChangeNote(true);
+														setLastUpdate(() => {
+															if (item.date)
+																return dayjs(
+																	item.date
+																);
+															else return null;
+														});
+													}
+												}}
+											>
+												<p className="text-[#e5e2e2]">
+													{item.title}
+												</p>
+												<p className="text-[#bcbcbc]">
+													Last Edited :{" "}
+													{dayjs(item.date).format(
+														"DD-MMM, HH:mm"
+													)}
+												</p>
+											</div>
+										);
 								})}
 							{((selectedOption === 0 &&
 								recentResults.length === 0) ||
@@ -332,6 +527,8 @@ const NotesPage = () => {
 							setSearchResults([]);
 							setEditorValue("");
 							setChangeNote(true);
+							setCurrNoteID("");
+							setCurrNoteValue("");
 							title.current!.value = "";
 							searchInput.current!.value = "";
 							setLastUpdate(null);
@@ -346,6 +543,7 @@ const NotesPage = () => {
 							setChangeNote(true);
 							title.current!.value = "";
 							setCurrNoteID("");
+							setCurrNoteValue("");
 							setLastUpdate(null);
 						}}
 					>
@@ -355,9 +553,6 @@ const NotesPage = () => {
 						className="font-inter text-xs tracking-wider text-white"
 						onClick={() => {
 							setConfirmDelete(true);
-							setTimeout(() => {
-								setConfirmDelete(false);
-							}, 5000);
 						}}
 						disabled={currNoteID === "" ? true : false}
 					>
@@ -390,3 +585,5 @@ const NotesPage = () => {
 };
 
 export default NotesPage;
+
+// TODO : remove oldest item from recent results
