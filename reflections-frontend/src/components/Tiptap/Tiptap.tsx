@@ -59,18 +59,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				>
 					code
 				</button>
-				<button
-					onClick={() => editor.chain().focus().unsetAllMarks().run()}
-					className="rounded-md px-2 py-0.5  "
-				>
-					clrm
-				</button>
-				<button
-					onClick={() => editor.chain().focus().clearNodes().run()}
-					className="rounded-md px-2 py-0.5  "
-				>
-					clrn
-				</button>
+
 				<button
 					onClick={() => editor.chain().focus().setParagraph().run()}
 					className={`${
@@ -164,6 +153,18 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				rounded-md   px-2 py-0.5 `}
 				>
 					highlight
+				</button>
+				<button
+					onClick={() => editor.chain().focus().unsetAllMarks().run()}
+					className="rounded-md px-2 py-0.5  "
+				>
+					clrm
+				</button>
+				<button
+					onClick={() => editor.chain().focus().clearNodes().run()}
+					className="rounded-md px-2 py-0.5  "
+				>
+					clrn
 				</button>
 				<button
 					onClick={() => editor.chain().focus().undo().run()}

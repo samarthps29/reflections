@@ -26,6 +26,7 @@ const NotesPage = () => {
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [confirmSave, setConfirmSave] = useState(false);
 	const [_, setCurrNoteValue] = useState("");
+	const [recentsCount, setRecentsCount] = useState(5);
 
 	const handleClick = (
 		title: string,
@@ -275,27 +276,68 @@ const NotesPage = () => {
 					/>
 					<div className="flex h-full w-full flex-col items-center">
 						<div className="flex h-full w-11/12 flex-col items-start">
-							<p className="mb-2 mt-4 text-sm text-[#a1a1a1]">
-								<button
-									className={`${
-										selectedOption === 0 &&
-										"font-semibold text-[#dadada]"
-									}`}
-									onClick={() => setSelectedOption(0)}
-								>
-									Recents
-								</button>{" "}
-								|{" "}
-								<button
-									className={`${
-										selectedOption === 1 &&
-										"font-semibold text-[#dadada]"
-									}`}
-									onClick={() => setSelectedOption(1)}
-								>
-									Results
-								</button>
-							</p>
+							<div className="mb-2 mt-4 flex w-full items-center justify-between">
+								<div className="flex whitespace-pre-wrap text-sm text-[#a1a1a1]">
+									<button
+										className={`${
+											selectedOption === 0 &&
+											"font-semibold text-[#dadada]"
+										}`}
+										onClick={() => setSelectedOption(0)}
+									>
+										Recents{" "}
+									</button>{" "}
+									|{" "}
+									<button
+										className={`${
+											selectedOption === 1 &&
+											"font-semibold text-[#dadada]"
+										}`}
+										onClick={() => setSelectedOption(1)}
+									>
+										Results
+									</button>
+								</div>
+								<div className="flex whitespace-pre-wrap text-[#a1a1a1]">
+									<button
+										className={`${
+											recentsCount === 5
+												? "text-[#dadada]"
+												: ""
+										}`}
+										onClick={() => {
+											setRecentsCount(5);
+										}}
+									>
+										5{" "}
+									</button>
+									<button
+										className={`${
+											recentsCount === 10
+												? "text-[#dadada]"
+												: ""
+										}`}
+										onClick={() => {
+											setRecentsCount(10);
+										}}
+									>
+										10{" "}
+									</button>
+									<button
+										className={`${
+											recentsCount === 15
+												? "text-[#dadada]"
+												: ""
+										}`}
+										onClick={() => {
+											setRecentsCount(15);
+										}}
+									>
+										15
+									</button>
+								</div>
+							</div>
+
 							{selectedOption === 1 &&
 								searchResults.map((item) => {
 									return (
@@ -391,7 +433,7 @@ const NotesPage = () => {
 								})}
 							{selectedOption === 0 &&
 								recentResults.map((item, index) => {
-									if (index < 5)
+									if (index < recentsCount)
 										return (
 											<div
 												className={`mb-3 w-full items-start justify-center rounded-lg ${
