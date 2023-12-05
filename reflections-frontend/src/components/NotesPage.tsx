@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import contentServices from "../api/contentServices";
 import Tiptap from "./Tiptap/Tiptap";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type note = {
 	_id: string;
@@ -27,6 +28,8 @@ const NotesPage = () => {
 	const [confirmSave, setConfirmSave] = useState(false);
 	const [_, setCurrNoteValue] = useState("");
 	const [recentsCount, setRecentsCount] = useState(5);
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleClick = (
 		title: string,
@@ -187,6 +190,26 @@ const NotesPage = () => {
 			});
 	}, []);
 
+	useEffect(() => {
+		if (location.state !== null && location.state.noteID !== null) {
+			contentServices
+				.get("/search/" + location.state.noteID)
+				.then((res) => {
+					setCurrNoteID(res.data._id);
+					setEditorValue(res.data.notesContent);
+					setChangeNote(true);
+					title.current!.value = res.data.title;
+					setLastUpdate(dayjs(res.data.date));
+					setCurrNoteValue(res.data.notesContent);
+				})
+				.catch((e) => {
+					console.log("An error occurred", e);
+				});
+
+			location.state = null;
+		}
+	}, []);
+
 	return (
 		<div
 			className="min-w-screen oveerflow-hidden flex h-screen justify-center"
@@ -251,6 +274,7 @@ const NotesPage = () => {
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
+						spellCheck="false"
 						ref={searchInput}
 						onKeyDown={(e) => {
 							if (e.key === "Enter") {
@@ -603,6 +627,20 @@ const NotesPage = () => {
 				</div>
 
 				<div className="right-0 flex">
+					<button
+						className="mr-4 font-inter text-xs tracking-wider text-white"
+						onClick={() => {
+							navigate(`${currNoteID}/reader`, {
+								state: {
+									title: title.current?.value,
+									value: editorValue,
+								},
+							});
+						}}
+						disabled={editorValue === "" ? true : false}
+					>
+						Reading Mode
+					</button>
 					<button
 						className="mr-4 font-inter text-xs tracking-wider text-white"
 						onClick={() => {
