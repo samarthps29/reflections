@@ -4,6 +4,7 @@ const verifyToken = require("../middleware/authTokenValidator");
 
 const {
 	getContentbyTitle,
+	getContentbyID,
 	getContentbyDate,
 	createContent,
 	updateContent,
@@ -12,6 +13,7 @@ const {
 
 router.use(verifyToken);
 router.route("/recents").get(getContentbyDate); // get the content for a specific date
+router.route("/search/:id").get(getContentbyID);
 router.route("/search").post(getContentbyTitle); // get the content for a specific date
 router.route("/new").post(createContent); // create content for a specific date
 router.route("/:id").put(updateContent); // update content for a specific date

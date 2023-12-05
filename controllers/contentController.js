@@ -16,13 +16,20 @@ const getContentbyTitle = asyncHandler(async (req, res) => {
 	}
 });
 
+const getContentbyID = asyncHandler(async (req, res) => {
+	const id = req.params.id;
+	const content = await Content.findById(id);
+	if (content.userID != req.user.id) {
+		res.status(403).json({ message: "Forbidden" });
+	}
+	res.status(200).send(content);
+});
+
 const getContentbyDate = asyncHandler(async (req, res) => {
 	try {
 		content = await Content.find({
 			userID: req.user.id,
-		})
-			.sort({ date: -1 })
-			.limit(5);
+		}).sort({ date: -1 });
 		return res.status(200).json(content);
 	} catch (err) {
 		console.log("Error");
@@ -71,10 +78,9 @@ const deleteContent = async (req, res) => {
 
 module.exports = {
 	getContentbyTitle,
+	getContentbyID,
 	getContentbyDate,
 	createContent,
 	updateContent,
 	deleteContent,
 };
-
-// TODO: add a function to delete note as well

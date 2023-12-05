@@ -200,7 +200,6 @@ const NotesPage = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log(location.state);
 		if (location.state !== null && location.state.noteID !== null) {
 			contentServices
 				.get("/search/" + location.state.noteID)
