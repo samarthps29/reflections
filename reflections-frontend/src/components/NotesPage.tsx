@@ -27,7 +27,16 @@ const NotesPage = () => {
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [confirmSave, setConfirmSave] = useState(false);
 	const [_, setCurrNoteValue] = useState("");
-	const [recentsCount, setRecentsCount] = useState(5);
+	const [recentsCount, setRecentsCount] = useState(() => {
+		const cnt = localStorage.getItem("recentsCount");
+		const defaultVal = 5;
+		if (cnt !== null) {
+			return parseInt(cnt, 10);
+		} else {
+			localStorage.setItem("recentsCount", defaultVal.toString());
+			return defaultVal;
+		}
+	});
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -191,6 +200,7 @@ const NotesPage = () => {
 	}, []);
 
 	useEffect(() => {
+		console.log(location.state);
 		if (location.state !== null && location.state.noteID !== null) {
 			contentServices
 				.get("/search/" + location.state.noteID)
@@ -205,14 +215,19 @@ const NotesPage = () => {
 				.catch((e) => {
 					console.log("An error occurred", e);
 				});
-
-			location.state = null;
+			// imp keep note
+			window.history.replaceState({ noteID: null }, document.title);
 		}
 	}, []);
 
+	useEffect(() => {
+		localStorage.setItem("recentsCount", recentsCount.toString());
+	}, [recentsCount]);
+
 	return (
 		<div
-			className="min-w-screen oveerflow-hidden flex h-screen justify-center"
+			// overflow-hidden
+			className="min-w-screen flex h-screen justify-center"
 			onKeyDown={(e) => {
 				if (e.key === "Escape") {
 					setConfirmDelete(false);
@@ -270,7 +285,9 @@ const NotesPage = () => {
 				</div>
 			)}
 			{showSearch && (
-				<div className="customScroll flex h-full w-1/4 flex-col items-center overflow-auto border-r-[1px] border-[#515151] bg-[#1f1f1f] pb-12">
+				// removed pb-12 from this div
+				// removed overflow-auto, customScroll from this div
+				<div className="flex h-screen w-1/4 flex-col items-center border-r-[1px] border-[#515151] bg-[#1f1f1f]">
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
@@ -298,7 +315,7 @@ const NotesPage = () => {
 							}
 						}}
 					/>
-					<div className="flex h-full w-full flex-col items-center">
+					<div className="flex h-full w-full flex-col items-center overflow-auto">
 						<div className="flex h-full w-11/12 flex-col items-start">
 							<div className="mb-2 mt-4 flex w-full items-center justify-between">
 								<div className="flex whitespace-pre-wrap text-sm text-[#a1a1a1]">
@@ -361,109 +378,15 @@ const NotesPage = () => {
 									</button>
 								</div>
 							</div>
-
-							{selectedOption === 1 &&
-								searchResults.map((item) => {
-									return (
-										<div
-											className={`mb-3 w-full items-start justify-center rounded-lg ${
-												currNoteID === item._id
-													? "bg-[#4b4b4b]"
-													: "bg-[#363636]"
-											} px-2 py-2`}
-											key={item._id}
-											onClick={() => {
-												let x: string = "",
-													y: string = "";
-												setCurrNoteValue((prev) => {
-													x = prev;
-													return prev;
-												});
-												setEditorValue((prev) => {
-													y = prev;
-													return prev;
-												});
-												if (x !== y) {
-													// console.log(
-													// 	"values differ"
-													// );
-													setConfirmSave(true);
-													checkNoteSaved().then(
-														() => {
-															// console.log(
-															// 	"dialog box appears"
-															// );
-															title.current!.value =
-																item.title;
-															setEditorValue(
-																item.notesContent
-															);
-															setCurrNoteValue(
-																item.notesContent
-															);
-															setCurrNoteID(
-																item._id
-															);
-															setChangeNote(true);
-															setLastUpdate(
-																() => {
-																	if (
-																		item.date
-																	)
-																		return dayjs(
-																			item.date
-																		);
-																	else
-																		return null;
-																}
-															);
-															// console.log(
-															// 	"Dialog box removed"
-															// );
-														}
-													);
-												} else {
-													title.current!.value =
-														item.title;
-													setEditorValue(
-														item.notesContent
-													);
-													setCurrNoteValue(
-														item.notesContent
-													);
-													setCurrNoteID(item._id);
-													setChangeNote(true);
-													setLastUpdate(() => {
-														if (item.date)
-															return dayjs(
-																item.date
-															);
-														else return null;
-													});
-												}
-											}}
-										>
-											<p className="text-[#e5e2e2]">
-												{item.title}
-											</p>
-											<p className="text-[#bcbcbc]">
-												Last Edited :{" "}
-												{dayjs(item.date).format(
-													"DD-MMM, HH:mm"
-												)}
-											</p>
-										</div>
-									);
-								})}
-							{selectedOption === 0 &&
-								recentResults.map((item, index) => {
-									if (index < recentsCount)
+							<div className="customScroll flex h-fit w-full flex-col overflow-auto">
+								{selectedOption === 1 &&
+									searchResults.map((item, index) => {
 										return (
 											<div
 												className={`mb-3 w-full items-start justify-center rounded-lg ${
 													currNoteID === item._id
 														? "bg-[#4b4b4b]"
-														: "bg-[#333333]"
+														: "bg-[#363636]"
 												} px-2 py-2`}
 												key={item._id}
 												onClick={() => {
@@ -477,7 +400,6 @@ const NotesPage = () => {
 														y = prev;
 														return prev;
 													});
-
 													if (x !== y) {
 														// console.log(
 														// 	"values differ"
@@ -514,7 +436,6 @@ const NotesPage = () => {
 																			return null;
 																	}
 																);
-
 																// console.log(
 																// 	"Dialog box removed"
 																// );
@@ -541,9 +462,14 @@ const NotesPage = () => {
 													}
 												}}
 											>
-												<p className="text-[#e5e2e2]">
-													{item.title}
-												</p>
+												<div className="flex justify-between ">
+													<p className="text-[#e5e2e2]">
+														{item.title}
+													</p>
+													<p className="text-[#bcbcbc]">
+														#{index + 1}
+													</p>
+												</div>
 												<p className="text-[#bcbcbc]">
 													Last Edited :{" "}
 													{dayjs(item.date).format(
@@ -552,14 +478,137 @@ const NotesPage = () => {
 												</p>
 											</div>
 										);
-								})}
-							{((selectedOption === 0 &&
+									})}
+							</div>
+							<div className="customScroll flex h-fit w-full flex-col overflow-auto">
+								{selectedOption === 0 &&
+									recentResults.map((item, index) => {
+										if (index < recentsCount)
+											return (
+												<div
+													className={`mb-3 w-full items-start justify-center rounded-lg ${
+														currNoteID === item._id
+															? "bg-[#4b4b4b]"
+															: "bg-[#333333]"
+													} px-2 py-2`}
+													key={item._id}
+													onClick={() => {
+														let x: string = "",
+															y: string = "";
+														setCurrNoteValue(
+															(prev) => {
+																x = prev;
+																return prev;
+															}
+														);
+														setEditorValue(
+															(prev) => {
+																y = prev;
+																return prev;
+															}
+														);
+
+														if (x !== y) {
+															// console.log(
+															// 	"values differ"
+															// );
+															setConfirmSave(
+																true
+															);
+															checkNoteSaved().then(
+																() => {
+																	// console.log(
+																	// 	"dialog box appears"
+																	// );
+																	title.current!.value =
+																		item.title;
+																	setEditorValue(
+																		item.notesContent
+																	);
+																	setCurrNoteValue(
+																		item.notesContent
+																	);
+																	setCurrNoteID(
+																		item._id
+																	);
+																	setChangeNote(
+																		true
+																	);
+																	setLastUpdate(
+																		() => {
+																			if (
+																				item.date
+																			)
+																				return dayjs(
+																					item.date
+																				);
+																			else
+																				return null;
+																		}
+																	);
+
+																	// console.log(
+																	// 	"Dialog box removed"
+																	// );
+																}
+															);
+														} else {
+															title.current!.value =
+																item.title;
+															setEditorValue(
+																item.notesContent
+															);
+															setCurrNoteValue(
+																item.notesContent
+															);
+															setCurrNoteID(
+																item._id
+															);
+															setChangeNote(true);
+															setLastUpdate(
+																() => {
+																	if (
+																		item.date
+																	)
+																		return dayjs(
+																			item.date
+																		);
+																	else
+																		return null;
+																}
+															);
+														}
+													}}
+												>
+													<div className="flex justify-between ">
+														<p className="text-[#e5e2e2]">
+															{item.title}
+														</p>
+														<p className="text-[#bcbcbc]">
+															#{index + 1}
+														</p>
+													</div>
+													<p className="text-[#bcbcbc]">
+														Last Edited :{" "}
+														{dayjs(
+															item.date
+														).format(
+															"DD-MMM, HH:mm"
+														)}
+													</p>
+												</div>
+											);
+									})}
+							</div>
+							{(selectedOption === 0 &&
 								recentResults.length === 0) ||
-								(selectedOption === 1 &&
-									searchResults.length === 0)) && (
+							(selectedOption === 1 &&
+								searchResults.length === 0) ? (
 								<div className="mt-4 flex w-11/12 items-center justify-center text-[#a1a1a1]">
 									{isLoading ? "Loading" : "Nothing Here"}
 								</div>
+							) : (
+								<div className="flex w-full pt-8"></div>
 							)}
 						</div>
 					</div>
