@@ -10,7 +10,8 @@ body {
 }
 
 body::-webkit-scrollbar {
-	width: 1px;
+	width: 0px;
+	height: 0px;
 }
 
 body::-webkit-scrollbar-track {
@@ -22,26 +23,10 @@ body::-webkit-scrollbar-thumb {
 	border-radius: 4px;
 }
 
-textarea::-webkit-scrollbar {
-	width: 2px;
-}
-
-textarea::-webkit-scrollbar-track {
-	background-color: #222222;
-}
-
-textarea::-webkit-scrollbar-thumb {
-	background: #4c4c4c;
-	border-radius: 4px;
-}
-
 .customScroll::-webkit-scrollbar {
 	width: 0px;
+	height: 0px;
 }
-
-/* .customScroll::-webkit-scrollbar-track {
-	background-color: #000000;
-} */
 
 .customScroll::-webkit-scrollbar-thumb {
 	background: rgba(174, 174, 174, 0.7);
@@ -59,20 +44,4 @@ input:-webkit-autofill:active {
 
 ::-webkit-input-placeholder {
 	-webkit-text-fill-color: rgb(147, 147, 147);
-}
-
-div.ant-picker-cell-inner {
-	padding-right: 1px;
-}
-
-:where(.css-dev-only-do-not-override-1xapkr2).ant-picker-dropdown
-	.ant-picker-cell-in-view.ant-picker-cell-today
-	.ant-picker-cell-inner::before {
-	border: 0px;
-}
-
-td.ant-picker-cell.ant-picker-cell-in-view.ant-picker-cell-selected
-	div.ant-picker-cell-inner {
-	color: #000000;
-	font-weight: 700;
 }

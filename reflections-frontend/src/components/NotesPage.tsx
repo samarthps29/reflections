@@ -286,7 +286,7 @@ const NotesPage = () => {
 			{showSearch && (
 				// removed pb-12 from this div
 				// removed overflow-auto, customScroll from this div
-				<div className="flex h-screen w-1/4 flex-col items-center border-r-[1px] border-[#515151] bg-[#1f1f1f]">
+				<div className="hidden h-screen w-0 flex-col items-center border-r-[1px] border-[#515151] bg-[#1f1f1f] md:flex md:w-1/4">
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
@@ -373,110 +373,139 @@ const NotesPage = () => {
 											setRecentsCount(15);
 										}}
 									>
-										15
+										15{" "}
+									</button>
+									<button
+										className={`${
+											recentsCount === 10000000
+												? "text-[#dadada]"
+												: ""
+										}`}
+										onClick={() => {
+											setRecentsCount(10000000);
+										}}
+									>
+										INF{" "}
 									</button>
 								</div>
 							</div>
 							<div className="customScroll flex h-fit w-full flex-col overflow-auto">
 								{selectedOption === 1 &&
 									searchResults.map((item, index) => {
-										return (
-											<div
-												className={`mb-3 w-full items-start justify-center rounded-lg ${
-													currNoteID === item._id
-														? "bg-[#4b4b4b]"
-														: "bg-[#363636]"
-												} px-2 py-2`}
-												key={item._id}
-												onClick={() => {
-													let x: string = "",
-														y: string = "";
-													setCurrNoteValue((prev) => {
-														x = prev;
-														return prev;
-													});
-													setEditorValue((prev) => {
-														y = prev;
-														return prev;
-													});
-													if (x !== y) {
-														// console.log(
-														// 	"values differ"
-														// );
-														setConfirmSave(true);
-														checkNoteSaved().then(
-															() => {
-																// console.log(
-																// 	"dialog box appears"
-																// );
-																title.current!.value =
-																	item.title;
-																setEditorValue(
-																	item.notesContent
-																);
-																setCurrNoteValue(
-																	item.notesContent
-																);
-																setCurrNoteID(
-																	item._id
-																);
-																setChangeNote(
-																	true
-																);
-																setLastUpdate(
-																	() => {
-																		if (
-																			item.date
-																		)
-																			return dayjs(
-																				item.date
-																			);
-																		else
-																			return null;
-																	}
-																);
-																// console.log(
-																// 	"Dialog box removed"
-																// );
+										if (index < recentsCount) {
+											return (
+												<div
+													className={`mb-3 w-full items-start justify-center rounded-lg ${
+														currNoteID === item._id
+															? "bg-[#4b4b4b]"
+															: ""
+													} bg-[#333333] px-2 py-2 hover:bg-[#4b4b4b]`}
+													key={item._id}
+													onClick={() => {
+														let x: string = "",
+															y: string = "";
+														setCurrNoteValue(
+															(prev) => {
+																x = prev;
+																return prev;
 															}
 														);
-													} else {
-														title.current!.value =
-															item.title;
 														setEditorValue(
-															item.notesContent
+															(prev) => {
+																y = prev;
+																return prev;
+															}
 														);
-														setCurrNoteValue(
-															item.notesContent
-														);
-														setCurrNoteID(item._id);
-														setChangeNote(true);
-														setLastUpdate(() => {
-															if (item.date)
-																return dayjs(
-																	item.date
-																);
-															else return null;
-														});
-													}
-												}}
-											>
-												<div className="flex justify-between ">
-													<p className="text-[#e5e2e2]">
-														{item.title}
-													</p>
+														if (x !== y) {
+															// console.log(
+															// 	"values differ"
+															// );
+															setConfirmSave(
+																true
+															);
+															checkNoteSaved().then(
+																() => {
+																	// console.log(
+																	// 	"dialog box appears"
+																	// );
+																	title.current!.value =
+																		item.title;
+																	setEditorValue(
+																		item.notesContent
+																	);
+																	setCurrNoteValue(
+																		item.notesContent
+																	);
+																	setCurrNoteID(
+																		item._id
+																	);
+																	setChangeNote(
+																		true
+																	);
+																	setLastUpdate(
+																		() => {
+																			if (
+																				item.date
+																			)
+																				return dayjs(
+																					item.date
+																				);
+																			else
+																				return null;
+																		}
+																	);
+																	// console.log(
+																	// 	"Dialog box removed"
+																	// );
+																}
+															);
+														} else {
+															title.current!.value =
+																item.title;
+															setEditorValue(
+																item.notesContent
+															);
+															setCurrNoteValue(
+																item.notesContent
+															);
+															setCurrNoteID(
+																item._id
+															);
+															setChangeNote(true);
+															setLastUpdate(
+																() => {
+																	if (
+																		item.date
+																	)
+																		return dayjs(
+																			item.date
+																		);
+																	else
+																		return null;
+																}
+															);
+														}
+													}}
+												>
+													<div className="flex justify-between ">
+														<p className="text-[#e5e2e2]">
+															{item.title}
+														</p>
+														<p className="text-[#bcbcbc]">
+															#{index + 1}
+														</p>
+													</div>
 													<p className="text-[#bcbcbc]">
-														#{index + 1}
+														Last Edited :{" "}
+														{dayjs(
+															item.date
+														).format(
+															"DD-MMM, HH:mm"
+														)}
 													</p>
 												</div>
-												<p className="text-[#bcbcbc]">
-													Last Edited :{" "}
-													{dayjs(item.date).format(
-														"DD-MMM, HH:mm"
-													)}
-												</p>
-											</div>
-										);
+											);
+										}
 									})}
 							</div>
 							<div className="customScroll flex h-fit w-full flex-col overflow-auto">
@@ -488,8 +517,8 @@ const NotesPage = () => {
 													className={`mb-3 w-full items-start justify-center rounded-lg ${
 														currNoteID === item._id
 															? "bg-[#4b4b4b]"
-															: "bg-[#333333]"
-													} px-2 py-2`}
+															: ""
+													} bg-[#333333] px-2 py-2 hover:bg-[#4b4b4b]`}
 													key={item._id}
 													onClick={() => {
 														let x: string = "",
@@ -613,7 +642,9 @@ const NotesPage = () => {
 					</div>
 				</div>
 			)}
-			<div className={`flex ${showSearch ? "w-3/4" : "w-full"}`}>
+			<div
+				className={`flex ${showSearch ? "w-full md:w-3/4" : "w-full"}`}
+			>
 				<Tiptap
 					title={title}
 					editorValue={editorValue}
@@ -685,7 +716,7 @@ const NotesPage = () => {
 								},
 							});
 						}}
-						disabled={editorValue === "" ? true : false}
+						disabled={currNoteID === "" ? true : false}
 					>
 						Reading Mode
 					</button>
@@ -713,5 +744,3 @@ const NotesPage = () => {
 };
 
 export default NotesPage;
-
-// TODO : remove oldest item from recent results

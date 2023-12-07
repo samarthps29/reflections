@@ -17,12 +17,12 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	}
 	const navigate = useNavigate();
 	return (
-		<div className="flex flex-wrap justify-center text-[17px]">
-			<div className="fixed z-10 mt-8 flex gap-1 rounded-lg bg-[#363636] px-2 py-[5px] text-[#a1a1a1]">
+		<div className="flex justify-center text-[17px]">
+			<div className="overflow-auto customScroll mx-4 mt-8 flex gap-1 rounded-lg bg-[#363636] px-2 py-[5px] text-[#a1a1a1]">
 				<button
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					disabled={!editor.can().chain().focus().toggleBold().run()}
-					className={`${
+					className={`flex ${
 						editor.isActive("bold") ? "is-active" : ""
 					} rounded-md px-2 py-0.5`}
 				>
@@ -33,7 +33,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					disabled={
 						!editor.can().chain().focus().toggleItalic().run()
 					}
-					className={`${
+					className={`flex ${
 						editor.isActive("italic") ? "is-active" : ""
 					} rounded-md px-2 py-0.5 `}
 				>
@@ -53,7 +53,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				<button
 					onClick={() => editor.chain().focus().toggleCode().run()}
 					disabled={!editor.can().chain().focus().toggleCode().run()}
-					className={`${
+					className={`flex ${
 						editor.isActive("code") ? "is-active" : ""
 					} rounded-md px-2 py-0.5 `}
 				>
@@ -64,7 +64,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					onClick={() => editor.chain().focus().setParagraph().run()}
 					className={`${
 						editor.isActive("paragraph") ? "is-active" : ""
-					} rounded-md    px-2 py-0.5 `}
+					} flex rounded-md px-2 py-0.5 `}
 				>
 					paragraph
 				</button>
@@ -77,7 +77,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 						editor.isActive("heading", { level: 1 })
 							? "is-active"
 							: ""
-					} rounded-md    px-2 py-0.5 `}
+					} flex rounded-md px-2 py-0.5 `}
 				>
 					heading
 				</button>
@@ -88,7 +88,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					}
 					className={`${
 						editor.isActive("bulletList") ? "is-active" : ""
-					} rounded-md    px-2 py-0.5 `}
+					} flex rounded-md px-2 py-0.5 `}
 				>
 					list
 				</button>
@@ -108,9 +108,9 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					}
 					className={`${
 						editor.isActive("codeBlock") ? "is-active" : ""
-					} rounded-md    px-2 py-0.5 `}
+					} flex rounded-md px-2 py-0.5 `}
 				>
-					code block
+					codeblock
 				</button>
 				<button
 					onClick={() =>
@@ -118,7 +118,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					}
 					className={`${
 						editor.isActive("blockquote") ? "is-active" : ""
-					} rounded-md    px-2 py-0.5 `}
+					} flex rounded-md px-2 py-0.5 `}
 				>
 					blockquote
 				</button>
@@ -126,7 +126,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					onClick={() =>
 						editor.chain().focus().setHorizontalRule().run()
 					}
-					className="rounded-md    px-2 py-0.5  "
+					className="flex rounded-md px-2 py-0.5  "
 				>
 					rule
 				</button>
@@ -150,33 +150,33 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 							? "is-active"
 							: ""
 					}
-				rounded-md   px-2 py-0.5 `}
+				flex rounded-md px-2 py-0.5 `}
 				>
 					highlight
 				</button>
 				<button
 					onClick={() => editor.chain().focus().unsetAllMarks().run()}
-					className="rounded-md px-2 py-0.5  "
+					className="flex rounded-md px-2 py-0.5  "
 				>
 					clrm
 				</button>
 				<button
 					onClick={() => editor.chain().focus().clearNodes().run()}
-					className="rounded-md px-2 py-0.5  "
+					className="flex rounded-md px-2 py-0.5  "
 				>
 					clrn
 				</button>
 				<button
 					onClick={() => editor.chain().focus().undo().run()}
 					disabled={!editor.can().chain().focus().undo().run()}
-					className="rounded-md    px-2 py-0.5  "
+					className="flex rounded-md px-2 py-0.5  "
 				>
 					undo
 				</button>
 				<button
 					onClick={() => editor.chain().focus().redo().run()}
 					disabled={!editor.can().chain().focus().redo().run()}
-					className="rounded-md   px-2 py-0.5  "
+					className="flex rounded-md px-2 py-0.5  "
 				>
 					redo
 				</button>
@@ -274,7 +274,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 			</button> */}
 
 				<button
-					className="rounded-md px-2 py-0.5  hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"
+					className="flex rounded-md px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"
 					onClick={() => {
 						userServices.get("/logout");
 						localStorage.removeItem("accessToken");
@@ -342,7 +342,7 @@ const Tiptap = ({
 		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1f1f1f]">
 			<MenuBar editor={editor} />
 			<input
-				className="mx-8 mt-24 flex w-1/4 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
+				className="mx-8 mt-8 flex w-1/4 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
 				placeholder="title goes here"
 				ref={title}
 			/>
