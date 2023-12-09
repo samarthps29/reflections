@@ -55,7 +55,7 @@ const userLogin = asyncHandler(async (req, res) => {
 			const accessToken = generateAccessToken(user);
 			const refreshToken = generateRefreshToken(user);
 			// Sending the refresh token as HTTP only cookie
-			const expiresInDays = 7;
+			const expiresInDays = 14;
 			const expirationDate = new Date();
 			expirationDate.setDate(expirationDate.getDate() + expiresInDays);
 			res.cookie("refreshToken", refreshToken, {

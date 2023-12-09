@@ -6,6 +6,7 @@ const HandleRouteNotFound = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			navigate("/", { replace: true });
+			// navigate(-1);
 		}, 3000);
 	}, []);
 	return (

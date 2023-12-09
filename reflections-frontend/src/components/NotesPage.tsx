@@ -189,12 +189,15 @@ const NotesPage = () => {
 	}
 
 	useEffect(() => {
+		setIsLoading(true);
 		contentServices
 			.get("/recents")
 			.then((res) => {
+				setIsLoading(false);
 				setRecentResults(res.data);
 			})
 			.catch(() => {
+				setIsLoading(false);
 				setRecentResults([]);
 			});
 	}, []);
@@ -287,7 +290,7 @@ const NotesPage = () => {
 				// removed pb-12 from this div
 				// removed overflow-auto, customScroll from this div
 				// bg-[#1f1f1f]
-				<div className="hidden h-screen w-0 flex-col items-center border-r-[1px] border-[#515151] bg-[#1f1f1f] md:flex md:w-1/4">
+				<div className="lg:1/4 md:1/3 flex h-screen w-3/4 flex-col items-center border-r-[1px] border-[#515151] bg-[#1f1f1f] sm:w-2/5">
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
@@ -644,7 +647,9 @@ const NotesPage = () => {
 				</div>
 			)}
 			<div
-				className={`flex ${showSearch ? "w-full md:w-3/4" : "w-full"}`}
+				className={`flex ${
+					showSearch ? "w-1/4 sm:w-3/5 md:w-2/3 lg:w-3/4" : "w-full"
+				}`}
 			>
 				<Tiptap
 					title={title}

@@ -18,7 +18,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	const navigate = useNavigate();
 	return (
 		<div className="flex justify-center text-[17px]">
-			<div className="customScroll mx-4 mt-8 flex gap-1 overflow-auto rounded-lg bg-[#363636] px-2 py-[5px] text-[#a1a1a1]">
+			<div className="customScroll mx-8 mt-8 flex gap-1 overflow-auto rounded-lg bg-[#363636] px-1 py-[5px] text-[#a1a1a1]">
 				<button
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -39,17 +39,17 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				>
 					italic
 				</button>
-				{/* <button
+				<button
 					onClick={() => editor.chain().focus().toggleStrike().run()}
 					disabled={
 						!editor.can().chain().focus().toggleStrike().run()
 					}
-					className={`${
+					className={`flex ${
 						editor.isActive("strike") ? "is-active" : ""
 					} rounded-md px-2 py-0.5 `}
 				>
 					strike
-				</button> */}
+				</button>
 				<button
 					onClick={() => editor.chain().focus().toggleCode().run()}
 					disabled={!editor.can().chain().focus().toggleCode().run()}
@@ -251,27 +251,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				>
 					teal
 				</button> */}
-				{/* <button
-				onClick={() =>
-					editor
-						.chain()
-						.focus()
-						.toggleHighlight({ color: "#ffc078" })
-						.setColor(
-							editor?.isActive("highlight", { color: "#ffc078" })
-								? ""
-								: "#000000"
-						)
-						.run()
-				}
-				className={`${
-					editor.isActive("highlight", { color: "#ffc078" })
-						? "is-active"
-						: ""
-				} rounded-md   px-2 py-0.5`}
-			>
-				yellow
-			</button> */}
 
 				<button
 					className="flex rounded-md px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"

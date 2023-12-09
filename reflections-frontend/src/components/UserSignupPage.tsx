@@ -20,6 +20,7 @@ const UserSignupPage = () => {
 			</div>
 			<div className="z-10 flex w-3/5 flex-col items-center justify-center sm:w-1/2 md:w-[45%] lg:w-1/4">
 				<form
+					name="signupform"
 					onSubmit={(e) => {
 						setButtonText("Loading...");
 						e.preventDefault();
