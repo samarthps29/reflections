@@ -18,7 +18,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	const navigate = useNavigate();
 	return (
 		<div className="flex justify-center text-[17px]">
-			<div className="overflow-auto customScroll mx-4 mt-8 flex gap-1 rounded-lg bg-[#363636] px-2 py-[5px] text-[#a1a1a1]">
+			<div className="customScroll mx-4 mt-8 flex gap-1 overflow-auto rounded-lg bg-[#363636] px-2 py-[5px] text-[#a1a1a1]">
 				<button
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -339,6 +339,7 @@ const Tiptap = ({
 	};
 
 	return (
+		// bg-[#1f1f1f]
 		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1f1f1f]">
 			<MenuBar editor={editor} />
 			<input

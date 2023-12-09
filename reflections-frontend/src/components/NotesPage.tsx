@@ -286,6 +286,7 @@ const NotesPage = () => {
 			{showSearch && (
 				// removed pb-12 from this div
 				// removed overflow-auto, customScroll from this div
+				// bg-[#1f1f1f]
 				<div className="hidden h-screen w-0 flex-col items-center border-r-[1px] border-[#515151] bg-[#1f1f1f] md:flex md:w-1/4">
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"

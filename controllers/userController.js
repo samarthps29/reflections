@@ -10,7 +10,7 @@ const generateAccessToken = (user) => {
 		{ id: user.id, userName: user.userName },
 		process.env.ACCESS_SECRET_KEY,
 		{
-			expiresIn: "1d",
+			expiresIn: "1h",
 		}
 	);
 };
@@ -20,7 +20,7 @@ const generateRefreshToken = (user) => {
 		{ id: user.id, userName: user.userName },
 		process.env.REFRESH_SECRET_KEY,
 		{
-			expiresIn: "7d",
+			expiresIn: "1d",
 		}
 	);
 };
@@ -52,20 +52,24 @@ const userLogin = asyncHandler(async (req, res) => {
 		res.status(400).json({ message: "All fields are mandatory" });
 	}
 	const user = await User.findOne({ userName });
-	// console.log(user);
-	// TODO: need to check if user does not exists and is null
-	if (bcrypt.compare(password, user.password)) {
-		const accessToken = generateAccessToken(user);
-		const refreshToken = generateRefreshToken(user);
-		// Sending the refresh token as HTTP only cookie
-		refreshTokens.push(refreshToken);
-		res.cookie("refreshToken", refreshToken, {
-			httpOnly: true,
-			sameSite: "None",
-			secure: true,
-		});
-		// Sending the access token as JSON Object
-		res.status(200).json({ accessToken });
+	if (user) {
+		// TODO: need to check if user does not exists and is null
+		const match = await bcrypt.compare(password, user.password);
+		if (match) {
+			const accessToken = generateAccessToken(user);
+			const refreshToken = generateRefreshToken(user);
+			// Sending the refresh token as HTTP only cookie
+			refreshTokens.push(refreshToken);
+			res.cookie("refreshToken", refreshToken, {
+				httpOnly: true,
+				sameSite: "None",
+				secure: true,
+			});
+			// Sending the access token as JSON Object
+			res.status(200).json({ accessToken });
+		} else {
+			res.status(403).json({ message: "Incorrect Password" });
+		}
 	} else {
 		res.status(404).json({ message: "No such user found" });
 	}
