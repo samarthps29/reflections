@@ -17,7 +17,6 @@
     "@tiptap/pm": "^2.0.3",
     "@tiptap/react": "^2.0.3",
     "@tiptap/starter-kit": "^2.0.3",
-    "antd": "^5.5.2",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
     "jwt-decode": "^3.1.2",
