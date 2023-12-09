@@ -44,8 +44,8 @@ const Reader = () => {
 			>
 				Back
 			</Link>
-			<div className="flex min-h-full w-3/4 flex-col bg-[#363636] px-8 py-6 font-inter text-white">
-				<p className="flex w-1/4 border-b-2 border-[#a3a3a3] bg-transparent text-xl font-semibold text-[#e8e8e8]">
+			<div className="flex min-h-full w-11/12 flex-col bg-[#363636] px-8 py-6 font-inter text-white sm:w-4/5 md:w-3/4">
+				<p className="flex w-1/2 border-b-2 border-[#a3a3a3] bg-transparent text-xl font-semibold text-[#e8e8e8] sm:w-2/5 md:w-1/4">
 					{noteTitle}
 				</p>
 				<EditorContent

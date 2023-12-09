@@ -2,12 +2,11 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../api/userServices";
 
-const UserSignupPage = () => {
-	const nameRef = useRef<HTMLInputElement>(null);
-	const emailRef = useRef<HTMLInputElement>(null);
+const UpdatePassword = () => {
 	const userNameRef = useRef<HTMLInputElement>(null);
-	const passwordRef = useRef<HTMLInputElement>(null);
-	const [buttonText, setButtonText] = useState("Sign up");
+	const oldPasswordRef = useRef<HTMLInputElement>(null);
+	const newPasswordRef = useRef<HTMLInputElement>(null);
+	const [buttonText, setButtonText] = useState("Change Password");
 	const [error, setError] = useState(false);
 	const navigate = useNavigate();
 	return (
@@ -20,66 +19,55 @@ const UserSignupPage = () => {
 			</div>
 			<div className="z-10 flex w-3/4 flex-col items-center justify-center sm:w-1/2 md:w-[45%] lg:w-1/4">
 				<form
-					name="signupform"
+					name="updatepasswordform"
 					onSubmit={(e) => {
 						setButtonText("Loading...");
 						e.preventDefault();
 						userServices
-							.post("/new", {
-								name: nameRef.current?.value,
-								email: emailRef.current?.value,
+							.put("/updatePassword", {
 								userName: userNameRef.current?.value,
-								password: passwordRef.current?.value,
+								oldPassword: oldPasswordRef.current?.value,
+								newPassword: newPasswordRef.current?.value,
 							})
 							.then(() => {
-								// console.log("User Created Succesfully");
-								setButtonText("Sign up");
+								setButtonText("Change Password");
 								navigate("/login");
 							})
 							.catch((err) => {
 								console.log(err.response.data.message);
 								setError(true);
-								setButtonText("Sign up");
+								setButtonText("Change Password");
 							});
 					}}
 				>
 					<div className="mb-8 text-center font-serif text-xl font-bold tracking-tight text-white md:text-2xl lg:text-3xl">
-						Create a New Account
+						Update your password
 					</div>
-					<input
-						type="text"
-						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
-						placeholder="Name"
-						autoComplete="off"
-						ref={nameRef}
-						required
-						spellCheck={false}
-					/>
 
 					<input
 						type="text"
 						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
-						placeholder="Email"
-						autoComplete="off"
-						ref={emailRef}
-						required
-						spellCheck={false}
-					/>
-					<input
-						type="text"
-						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
 						placeholder="Username"
-						autoComplete="username"
+						autoComplete="off"
 						ref={userNameRef}
 						required
 						spellCheck={false}
 					/>
 					<input
 						type="password"
+						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
+						placeholder="Old Password"
+						autoComplete="off"
+						ref={oldPasswordRef}
+						required
+						spellCheck={false}
+					/>
+					<input
+						type="password"
 						className="text-md w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
-						placeholder="Password"
-						autoComplete="current-password"
-						ref={passwordRef}
+						placeholder="New Password"
+						autoComplete="off"
+						ref={newPasswordRef}
 						required
 						spellCheck={false}
 					/>
@@ -98,4 +86,4 @@ const UserSignupPage = () => {
 		</div>
 	);
 };
-export default UserSignupPage;
+export default UpdatePassword;

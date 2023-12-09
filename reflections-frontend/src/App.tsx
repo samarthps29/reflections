@@ -4,6 +4,7 @@ import UserLoginPage from "./components/UserLoginPage";
 import UserSignupPage from "./components/UserSignupPage";
 import HandleRouteNotFound from "./utility/HandleRouteNotFound";
 import Reader from "./components/Reader";
+import UpdatePassword from "./components/ForgotPassword";
 
 function App() {
 	return (
@@ -12,6 +13,7 @@ function App() {
 			<Route path="/:id/reader" element={<Reader />} />
 			<Route path="/login" element={<UserLoginPage />} />
 			<Route path="/signup" element={<UserSignupPage />} />
+			<Route path="/updatePassword" element={<UpdatePassword />} />
 			<Route path="*" element={<HandleRouteNotFound />} />
 		</Routes>
 	);

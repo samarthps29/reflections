@@ -324,7 +324,7 @@ const Tiptap = ({
 		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1f1f1f]">
 			<MenuBar editor={editor} />
 			<input
-				className="mx-8 mt-8 flex w-1/4 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
+				className="mx-8 mt-8 flex w-1/2 sm:w-2/5 md:w-1/4 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
 				placeholder="title goes here"
 				ref={title}
 			/>

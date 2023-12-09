@@ -17,7 +17,10 @@ const NotesPage = () => {
 	const title = useRef<HTMLInputElement>(null);
 	const [searchResults, setSearchResults] = useState<note[]>([]);
 	const [recentResults, setRecentResults] = useState<note[]>([]);
-	const [showSearch, setShowSearch] = useState(true);
+	const [showSearch, setShowSearch] = useState(() => {
+		if (window.innerWidth <= 600) return false;
+		else return true;
+	});
 	const [changeNote, setChangeNote] = useState(false);
 	const [currNoteID, setCurrNoteID] = useState("");
 	const [lastUpdate, setLastUpdate] = useState<Dayjs | null>(null);
