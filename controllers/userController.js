@@ -3,8 +3,6 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-let refreshTokens = [];
-
 const generateAccessToken = (user) => {
 	return jwt.sign(
 		{ id: user.id, userName: user.userName },
@@ -28,8 +26,6 @@ const generateRefreshToken = (user) => {
 const generateNewToken = (req, res) => {
 	const refreshToken = req.cookies.refreshToken;
 	if (!refreshToken) res.status(400).json({ message: "Not authenticated" });
-	else if (!refreshTokens.includes(refreshToken))
-		res.status(400).json({ message: "Refresh token is not valid" });
 	else {
 		jwt.verify(
 			refreshToken,
@@ -52,18 +48,21 @@ const userLogin = asyncHandler(async (req, res) => {
 		res.status(400).json({ message: "All fields are mandatory" });
 	}
 	const user = await User.findOne({ userName });
+	console.log(user);
 	if (user) {
-		// TODO: need to check if user does not exists and is null
 		const match = await bcrypt.compare(password, user.password);
 		if (match) {
 			const accessToken = generateAccessToken(user);
 			const refreshToken = generateRefreshToken(user);
 			// Sending the refresh token as HTTP only cookie
-			refreshTokens.push(refreshToken);
+			const expiresInDays = 7;
+			const expirationDate = new Date();
+			expirationDate.setDate(expirationDate.getDate() + expiresInDays);
 			res.cookie("refreshToken", refreshToken, {
 				httpOnly: true,
 				sameSite: "None",
 				secure: true,
+				expires: expirationDate,
 			});
 			// Sending the access token as JSON Object
 			res.status(200).json({ accessToken });

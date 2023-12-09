@@ -35,6 +35,7 @@ privateApiClient.interceptors.request.use((config) => {
 				}
 			})
 			.catch(() => {
+				console.log("Session Expired/No access token");
 				window.location.href = "/login";
 			});
 	} else {
@@ -44,4 +45,4 @@ privateApiClient.interceptors.request.use((config) => {
 	return config;
 });
 
-export { publicApiClient, privateApiClient };
+export { privateApiClient, publicApiClient };

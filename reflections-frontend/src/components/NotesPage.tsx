@@ -1,8 +1,8 @@
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import contentServices from "../api/contentServices";
 import Tiptap from "./Tiptap/Tiptap";
-import { useLocation, useNavigate } from "react-router-dom";
 
 type note = {
 	_id: string;
@@ -78,7 +78,7 @@ const NotesPage = () => {
 							setIsSaving("Save");
 						}, 1000);
 					}, 1000);
-					console.log("Updated Successfully!");
+					// console.log("Updated Successfully!");
 				})
 				.catch(() => {
 					setTimeout(() => {
@@ -87,7 +87,7 @@ const NotesPage = () => {
 							setIsSaving("Save");
 						}, 1000);
 					}, 1000);
-					console.log("Could not update the content");
+					// console.log("Could not update the content");
 				});
 		} else {
 			setIsSaving("Saving");
@@ -121,7 +121,7 @@ const NotesPage = () => {
 							setIsSaving("Save");
 						}, 1000);
 					}, 1000);
-					console.log("Saved Successfully!");
+					// console.log("Saved Successfully!");
 				})
 				.catch(() => {
 					setTimeout(() => {
@@ -130,7 +130,7 @@ const NotesPage = () => {
 							setIsSaving("Save");
 						}, 1000);
 					}, 1000);
-					console.log("Could not save the content");
+					// console.log("Could not save the content");
 				});
 		}
 	};

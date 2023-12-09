@@ -30,12 +30,12 @@ const UserSignupPage = () => {
 								password: passwordRef.current?.value,
 							})
 							.then(() => {
-								console.log("User Created Succesfully");
+								// console.log("User Created Succesfully");
 								setButtonText("Sign up");
 								navigate("/login");
 							})
-							.catch((err) => {
-								console.log(err);
+							.catch(() => {
+								// console.log(err);
 								setButtonText("Sign up");
 							});
 					}}

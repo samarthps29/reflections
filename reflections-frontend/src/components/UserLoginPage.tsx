@@ -8,6 +8,7 @@ const UserLoginPage = () => {
 	const [error, setError] = useState(false);
 	const [buttonText, setButtonText] = useState("Sign in");
 	const navigate = useNavigate();
+
 	return (
 		<div className="flex h-screen w-screen items-center justify-center bg-[#1c1c1c]">
 			<div className="fixed -top-20 left-20 z-0 rotate-180 -scale-x-100 font-inter text-[150px] font-bold tracking-widest text-[#f1f1f1]">
@@ -41,8 +42,8 @@ const UserLoginPage = () => {
 									navigate("/");
 								}
 							})
-							.catch((err) => {
-								console.log(err);
+							.catch(() => {
+								// console.log(err);
 								setButtonText("Sign in");
 								setError(true);
 							});

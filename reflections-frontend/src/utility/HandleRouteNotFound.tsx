@@ -9,7 +9,7 @@ const HandleRouteNotFound = () => {
 		}, 3000);
 	}, []);
 	return (
-		<div className="flex h-screen w-screen flex-col items-center justify-center bg-[#222222]">
+		<div className="flex h-screen w-screen flex-col items-center justify-center bg-[#1c1c1c]">
 			<p className="font-serif text-4xl font-bold text-white md:text-5xl lg:text-7xl">
 				404 Not Found
 			</p>
