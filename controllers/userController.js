@@ -8,7 +8,7 @@ const generateAccessToken = (user) => {
 		{ id: user.id, userName: user.userName },
 		process.env.ACCESS_SECRET_KEY,
 		{
-			expiresIn: "1h",
+			expiresIn: "2d",
 		}
 	);
 };
@@ -18,7 +18,7 @@ const generateRefreshToken = (user) => {
 		{ id: user.id, userName: user.userName },
 		process.env.REFRESH_SECRET_KEY,
 		{
-			expiresIn: "1d",
+			expiresIn: "14d",
 		}
 	);
 };
@@ -87,7 +87,7 @@ const createUser = asyncHandler(async (req, res) => {
 	const user_userName = await User.findOne({ userName });
 	const user_email = await User.findOne({ email });
 	if (user_userName || user_email) {
-		res.status(400).json({ message: "User already exists" });
+		res.status(409).json({ message: "User already exists" });
 	} else {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const createdUser = await User.create({

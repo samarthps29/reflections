@@ -42,8 +42,8 @@ const UserLoginPage = () => {
 									navigate("/");
 								}
 							})
-							.catch(() => {
-								// console.log(err);
+							.catch((err) => {
+								console.log(err.response.data.message);
 								setButtonText("Sign in");
 								setError(true);
 							});

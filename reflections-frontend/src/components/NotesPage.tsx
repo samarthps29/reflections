@@ -29,7 +29,7 @@ const NotesPage = () => {
 	const [_, setCurrNoteValue] = useState("");
 	const [recentsCount, setRecentsCount] = useState(() => {
 		const cnt = localStorage.getItem("recentsCount");
-		const defaultVal = 5;
+		const defaultVal = 10000000;
 		if (cnt !== null) {
 			return parseInt(cnt, 10);
 		} else {

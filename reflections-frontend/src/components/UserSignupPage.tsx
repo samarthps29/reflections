@@ -8,6 +8,7 @@ const UserSignupPage = () => {
 	const userNameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const [buttonText, setButtonText] = useState("Sign up");
+	const [error, setError] = useState(false);
 	const navigate = useNavigate();
 	return (
 		<div className="flex h-screen w-screen items-center justify-center bg-[#1c1c1c]">
@@ -34,8 +35,9 @@ const UserSignupPage = () => {
 								setButtonText("Sign up");
 								navigate("/login");
 							})
-							.catch(() => {
-								// console.log(err);
+							.catch((err) => {
+								console.log(err.response.data.message);
+								setError(true);
 								setButtonText("Sign up");
 							});
 					}}
@@ -81,7 +83,11 @@ const UserSignupPage = () => {
 						spellCheck={false}
 					/>
 					<button
-						className="mt-6 w-full rounded-md bg-[#61a7ec] px-3 py-2 font-serif font-bold text-black"
+						className={`mt-6 w-full rounded-md bg-[#61a7ec] px-3 py-2 font-serif font-bold ${
+							!error
+								? "bg-[#61a7ec] text-black"
+								: "bg-[#89375f] text-white"
+						}`}
 						type="submit"
 					>
 						{buttonText}
