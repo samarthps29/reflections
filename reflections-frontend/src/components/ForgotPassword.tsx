@@ -2,6 +2,9 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../api/userServices";
 
+const usernameRegex = /^[a-zA-Z0-9_]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const UpdatePassword = () => {
 	const userNameRef = useRef<HTMLInputElement>(null);
 	const oldPasswordRef = useRef<HTMLInputElement>(null);
@@ -21,23 +24,39 @@ const UpdatePassword = () => {
 				<form
 					name="updatepasswordform"
 					onSubmit={(e) => {
-						setButtonText("Loading...");
 						e.preventDefault();
-						userServices
-							.put("/updatePassword", {
-								userName: userNameRef.current?.value,
-								oldPassword: oldPasswordRef.current?.value,
-								newPassword: newPasswordRef.current?.value,
-							})
-							.then(() => {
-								setButtonText("Change Password");
-								navigate("/login");
-							})
-							.catch((err) => {
-								console.log(err.response.data.message);
-								setError(true);
-								setButtonText("Change Password");
-							});
+						let body: any = {};
+						const test1 = emailRegex.test(
+								userNameRef.current!.value
+							),
+							test2 = usernameRegex.test(
+								userNameRef.current!.value
+							);
+						if (test1 || test2) {
+							if (test1) {
+								body["email"] = userNameRef.current!.value;
+							} else {
+								body["userName"] = userNameRef.current!.value;
+							}
+							setButtonText("Loading...");
+							userServices
+								.put("/updatePassword", {
+									...body,
+									oldPassword: oldPasswordRef.current?.value,
+									newPassword: newPasswordRef.current?.value,
+								})
+								.then(() => {
+									setButtonText("Change Password");
+									navigate("/login");
+								})
+								.catch((err) => {
+									console.log(err.response.data.message);
+									setError(true);
+									setButtonText("Change Password");
+								});
+						} else {
+							setError(true);
+						}
 					}}
 				>
 					<div className="mb-8 text-center font-serif text-xl font-bold tracking-tight text-white md:text-2xl lg:text-3xl">

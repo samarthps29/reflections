@@ -45,7 +45,7 @@ const createContent = asyncHandler(async (req, res) => {
 		notesContent,
 	});
 	res.status(200).json({
-		message: "Content Created Succesfully",
+		message: "Content created succesfully",
 		id: createdContent._id,
 	});
 });
@@ -70,7 +70,7 @@ const deleteContent = async (req, res) => {
 	}
 	const deletedContent = await Content.findByIdAndRemove(id);
 	if (deletedContent) {
-		res.status(200).json({ message: "Content Removed Successfully" });
+		res.status(200).json({ message: "Content removed successfully" });
 	} else {
 		res.status(500).json({ message: "An error occurred" });
 	}

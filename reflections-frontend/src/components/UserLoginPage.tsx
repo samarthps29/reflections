@@ -2,6 +2,9 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import userServices from "../api/userServices";
 
+const usernameRegex = /^[a-zA-Z0-9_]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const UserLoginPage = () => {
 	const emailRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
@@ -23,31 +26,43 @@ const UserLoginPage = () => {
 					name="loginform"
 					onSubmit={(e) => {
 						e.preventDefault();
-						setButtonText("Loading...");
-						userServices
-							.post("/login", {
-								userName: emailRef.current?.value,
-								password: passwordRef.current?.value,
-							})
-							.then((res) => {
-								setButtonText("Sign in");
-								if (res.data.accessToken) {
-									localStorage.setItem(
-										"accessToken",
-										res.data.accessToken
-									);
-									localStorage.setItem(
-										"userName",
-										emailRef.current!.value
-									);
-									navigate("/");
-								}
-							})
-							.catch((err) => {
-								console.log(err.response.data.message);
-								setButtonText("Sign in");
-								setError(true);
-							});
+						let body: any = {};
+						const test1 = emailRegex.test(emailRef.current!.value),
+							test2 = usernameRegex.test(emailRef.current!.value);
+						if (test1 || test2) {
+							if (test1) {
+								body["email"] = emailRef.current!.value;
+							} else {
+								body["userName"] = emailRef.current!.value;
+							}
+							setButtonText("Loading...");
+							userServices
+								.post("/login", {
+									...body,
+									password: passwordRef.current?.value,
+								})
+								.then((res) => {
+									setButtonText("Sign in");
+									if (res.data.accessToken) {
+										localStorage.setItem(
+											"accessToken",
+											res.data.accessToken
+										);
+										localStorage.setItem(
+											"userName",
+											emailRef.current!.value
+										);
+										navigate("/");
+									}
+								})
+								.catch((err) => {
+									console.log(err.response.data.message);
+									setButtonText("Sign in");
+									setError(true);
+								});
+						} else {
+							setError(true);
+						}
 					}}
 				>
 					<div className="mb-8 w-full justify-center text-center font-serif text-2xl font-bold tracking-tight text-white md:text-2xl lg:text-3xl">
@@ -83,16 +98,18 @@ const UserLoginPage = () => {
 					>
 						{buttonText}
 					</button>
-					{/* {error && (
-						<div className="mt-1 flex w-full justify-end">
-							<p className="font-inter font-light text-[#e4a7a7]">
-								Could not sign in with these credentials
-							</p>
-						</div>
-					)} */}
+
+					<div className="mt-1 flex w-full justify-end">
+						<Link
+							className="font-serif text-xs text-[#e9e9e9]"
+							to="/updatePassword"
+						>
+							Forgot Password
+						</Link>
+					</div>
 
 					<div className="w-full text-center">
-						<p className="mt-5 font-inter text-sm font-bold text-[#dadada]">
+						<p className="mt-5 font-serif text-sm font-semibold text-[#e9e9e9]">
 							Don't have an account yet,{" "}
 							<Link className="font-bold text-white" to="/signup">
 								sign up.

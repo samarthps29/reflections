@@ -2,6 +2,10 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../api/userServices";
 
+const nameRegex = /^[a-zA-Z\s]+$/;
+const usernameRegex = /^[a-zA-Z0-9_]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const UserSignupPage = () => {
 	const nameRef = useRef<HTMLInputElement>(null);
 	const emailRef = useRef<HTMLInputElement>(null);
@@ -22,25 +26,33 @@ const UserSignupPage = () => {
 				<form
 					name="signupform"
 					onSubmit={(e) => {
-						setButtonText("Loading...");
 						e.preventDefault();
-						userServices
-							.post("/new", {
-								name: nameRef.current?.value,
-								email: emailRef.current?.value,
-								userName: userNameRef.current?.value,
-								password: passwordRef.current?.value,
-							})
-							.then(() => {
-								// console.log("User Created Succesfully");
-								setButtonText("Sign up");
-								navigate("/login");
-							})
-							.catch((err) => {
-								console.log(err.response.data.message);
-								setError(true);
-								setButtonText("Sign up");
-							});
+						if (
+							nameRegex.test(nameRef.current!.value) &&
+							emailRegex.test(emailRef.current!.value) &&
+							usernameRegex.test(userNameRef.current!.value)
+						) {
+							setButtonText("Loading...");
+							userServices
+								.post("/new", {
+									name: nameRef.current!.value,
+									email: emailRef.current!.value,
+									userName: userNameRef.current!.value,
+									password: passwordRef.current!.value,
+								})
+								.then(() => {
+									// console.log("User Created Succesfully");
+									setButtonText("Sign up");
+									navigate("/login");
+								})
+								.catch((err) => {
+									console.log(err.response.data.message);
+									setError(true);
+									setButtonText("Sign up");
+								});
+						} else {
+							setError(true);
+						}
 					}}
 				>
 					<div className="mb-8 text-center font-serif text-xl font-bold tracking-tight text-white md:text-2xl lg:text-3xl">
@@ -57,7 +69,7 @@ const UserSignupPage = () => {
 					/>
 
 					<input
-						type="text"
+						type="email"
 						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
 						placeholder="Email"
 						autoComplete="off"

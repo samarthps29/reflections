@@ -43,12 +43,18 @@ const generateNewToken = (req, res) => {
 };
 
 const userLogin = asyncHandler(async (req, res) => {
-	const { userName, password } = req.body;
-	if (!userName || !password) {
+	const { userName, email, password } = req.body;
+	if ((!userName && !email) || !password) {
 		res.status(400).json({ message: "All fields are mandatory" });
 	}
-	const user = await User.findOne({ userName });
-	console.log(user);
+
+	let user;
+	if (userName) {
+		user = await User.findOne({ userName });
+	} else {
+		user = await User.findOne({ email });
+	}
+
 	if (user) {
 		const match = await bcrypt.compare(password, user.password);
 		if (match) {
@@ -76,7 +82,7 @@ const userLogin = asyncHandler(async (req, res) => {
 
 const userLogout = asyncHandler(async (req, res) => {
 	res.clearCookie("refreshToken");
-	res.status(200).json({ message: "Cookie Cleared" });
+	res.status(200).json({ message: "User logged out successfully" });
 });
 
 const createUser = asyncHandler(async (req, res) => {
@@ -96,8 +102,57 @@ const createUser = asyncHandler(async (req, res) => {
 			email,
 			password: hashedPassword,
 		});
-		res.status(200).json({ message: "User created succesfully" });
+		if (createdUser) {
+			res.status(200).json({ message: "User created succesfully" });
+		} else {
+			res.status(400).json({ message: "User could not be created" });
+		}
 	}
 });
 
-module.exports = { userLogin, userLogout, createUser, generateNewToken };
+const updatePassword = asyncHandler(async (req, res) => {
+	const { userName, email, oldPassword, newPassword } = req.body;
+	if ((!userName && !email) || !oldPassword || !newPassword) {
+		res.status(400).json({ message: "All fields are mandatory" });
+	}
+
+	let user;
+	if (userName) {
+		user = await User.findOne({ userName });
+	} else {
+		user = await User.findOne({ email });
+	}
+
+	if (user) {
+		const match = await bcrypt.compare(oldPassword, user.password);
+		if (match) {
+			const updatedPassword = await bcrypt.hash(newPassword, 10);
+			const updatedUser = await User.findByIdAndUpdate(
+				user.id,
+				{ password: updatedPassword },
+				{ new: true }
+			);
+			if (updatedUser) {
+				res.status(200).json({
+					message: "Password updated successfully",
+				});
+			} else {
+				res.status(400).json({
+					message: "Password could not be updated",
+				});
+			}
+		} else {
+			res.status(403).json({ message: "Invalid old password" });
+		}
+	} else {
+		res.status(400).json({ message: "User does not exist" });
+	}
+});
+
+module.exports = {
+	userLogin,
+	userLogout,
+	createUser,
+	updatePassword,
+	generateNewToken,
+};
