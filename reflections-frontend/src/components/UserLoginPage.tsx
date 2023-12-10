@@ -89,7 +89,7 @@ const UserLoginPage = () => {
 
 					<button
 						// #42a6e0
-						className={`text-md mt-4 w-full rounded-md ${
+						className={`text-md mt-6 w-full rounded-md ${
 							!error
 								? "bg-[#61a7ec] text-black"
 								: "bg-[#89375f] text-white"

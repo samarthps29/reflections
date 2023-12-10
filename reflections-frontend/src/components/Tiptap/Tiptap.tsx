@@ -1,3 +1,4 @@
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import ListItem from "@tiptap/extension-list-item";
@@ -5,11 +6,20 @@ import TextStyle from "@tiptap/extension-text-style";
 import Typography from "@tiptap/extension-typography";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import cpp from "highlight.js/lib/languages/cpp";
+import js from "highlight.js/lib/languages/javascript";
+import python from "highlight.js/lib/languages/python";
+import { createLowlight } from "lowlight";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../../api/userServices";
 import { SmilieReplacer } from "./SmilieReplacer";
 import "./styles.scss";
-import { useEffect } from "react";
+
+const lowlight = createLowlight();
+lowlight.register("cpp", cpp);
+lowlight.register("py", python);
+lowlight.register("js", js);
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
 	if (!editor) {
@@ -46,7 +56,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					}
 					className={`flex ${
 						editor.isActive("strike") ? "is-active" : ""
-					} rounded-md px-2 py-0.5 `}
+					} rounded-md px-2 py-0.5`}
 				>
 					strike
 				</button>
@@ -69,20 +79,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					paragraph
 				</button>
 				<button
-					// change level
-					onClick={() =>
-						editor.chain().focus().toggleHeading({ level: 1 }).run()
-					}
-					className={`${
-						editor.isActive("heading", { level: 1 })
-							? "is-active"
-							: ""
-					} flex rounded-md px-2 py-0.5 `}
-				>
-					heading
-				</button>
-
-				<button
 					onClick={() =>
 						editor.chain().focus().toggleBulletList().run()
 					}
@@ -90,9 +86,9 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 						editor.isActive("bulletList") ? "is-active" : ""
 					} flex rounded-md px-2 py-0.5 `}
 				>
-					list
+					bulletlist
 				</button>
-				{/* <button
+				<button
 					onClick={() =>
 						editor.chain().focus().toggleOrderedList().run()
 					}
@@ -100,8 +96,8 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 						editor.isActive("orderedList") ? "is-active" : ""
 					} rounded-md    px-2 py-0.5 `}
 				>
-					ordered list
-				</button> */}
+					orderedlist
+				</button>
 				<button
 					onClick={() =>
 						editor.chain().focus().toggleCodeBlock().run()
@@ -128,7 +124,31 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					}
 					className="flex rounded-md px-2 py-0.5  "
 				>
-					rule
+					horizontalrule
+				</button>
+				<button
+					onClick={() =>
+						editor.chain().focus().toggleHeading({ level: 3 }).run()
+					}
+					className={`${
+						editor.isActive("heading", { level: 3 })
+							? "is-active"
+							: ""
+					} flex rounded-md px-2 py-0.5 `}
+				>
+					h1
+				</button>
+				<button
+					onClick={() =>
+						editor.chain().focus().toggleHeading({ level: 4 }).run()
+					}
+					className={`${
+						editor.isActive("heading", { level: 4 })
+							? "is-active"
+							: ""
+					} flex rounded-md px-2 py-0.5 `}
+				>
+					h2
 				</button>
 				<button
 					onClick={() =>
@@ -150,59 +170,9 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 							? "is-active"
 							: ""
 					}
-				flex rounded-md px-2 py-0.5 `}
+				flex rounded-md px-2 py-0.5`}
 				>
-					highlight
-				</button>
-				<button
-					onClick={() => editor.chain().focus().unsetAllMarks().run()}
-					className="flex rounded-md px-2 py-0.5  "
-				>
-					clrm
-				</button>
-				<button
-					onClick={() => editor.chain().focus().clearNodes().run()}
-					className="flex rounded-md px-2 py-0.5  "
-				>
-					clrn
-				</button>
-				<button
-					onClick={() => editor.chain().focus().undo().run()}
-					disabled={!editor.can().chain().focus().undo().run()}
-					className="flex rounded-md px-2 py-0.5  "
-				>
-					undo
-				</button>
-				<button
-					onClick={() => editor.chain().focus().redo().run()}
-					disabled={!editor.can().chain().focus().redo().run()}
-					className="flex rounded-md px-2 py-0.5  "
-				>
-					redo
-				</button>
-
-				{/* <button
-					onClick={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHighlight({ color: "#8ce99a" })
-							.setColor(
-								editor?.isActive("highlight", {
-									color: "#8ce99a",
-								})
-									? ""
-									: "#000000"
-							)
-							.run()
-					}
-					className={`${
-						editor.isActive("highlight", { color: "#8ce99a" })
-							? "is-active"
-							: ""
-					} rounded-md   px-2 py-0.5`}
-				>
-					green
+					purple
 				</button>
 				<button
 					onClick={() =>
@@ -223,11 +193,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 						editor.isActive("highlight", { color: "#74c0fc" })
 							? "is-active"
 							: ""
-					} rounded-md   px-2 py-0.5`}
+					} flex rounded-md px-2 py-0.5`}
 				>
 					blue
 				</button>
-
 				<button
 					onClick={() =>
 						editor
@@ -247,13 +216,38 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 						editor.isActive("highlight", { color: "#0ec3ac" })
 							? "is-active"
 							: ""
-					} rounded-md   px-2 py-0.5`}
+					} flex rounded-md px-2 py-0.5`}
 				>
 					teal
-				</button> */}
-
+				</button>
 				<button
-					className="flex rounded-md px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:font-semibold hover:text-stone-900"
+					onClick={() => editor.chain().focus().unsetAllMarks().run()}
+					className="flex rounded-md px-2 py-0.5  "
+				>
+					clearmarks
+				</button>
+				<button
+					onClick={() => editor.chain().focus().clearNodes().run()}
+					className="flex rounded-md px-2 py-0.5  "
+				>
+					clearnodes
+				</button>
+				<button
+					onClick={() => editor.chain().focus().undo().run()}
+					disabled={!editor.can().chain().focus().undo().run()}
+					className="flex rounded-md px-2 py-0.5  "
+				>
+					undo
+				</button>
+				<button
+					onClick={() => editor.chain().focus().redo().run()}
+					disabled={!editor.can().chain().focus().redo().run()}
+					className="flex rounded-md px-2 py-0.5  "
+				>
+					redo
+				</button>
+				<button
+					className="logoutBtn flex rounded-md px-2 py-0.5 hover:border-0 hover:bg-[#da6888] hover:text-stone-900"
 					onClick={() => {
 						userServices.get("/logout");
 						localStorage.removeItem("userName");
@@ -297,8 +291,13 @@ const Tiptap = ({
 					keepMarks: true,
 					keepAttributes: false,
 				},
+				codeBlock: false,
 			}),
 			SmilieReplacer,
+			CodeBlockLowlight.configure({
+				languageClassPrefix: "language-",
+				lowlight,
+			}),
 		],
 		onUpdate: ({ editor }) => {
 			const html = editor.getHTML();
@@ -324,9 +323,10 @@ const Tiptap = ({
 		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1f1f1f]">
 			<MenuBar editor={editor} />
 			<input
-				className="mx-8 mt-8 flex w-1/2 sm:w-2/5 md:w-1/4 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada]"
+				className="mx-8 mt-8 flex w-1/2 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada] sm:w-2/5 md:w-1/4"
 				placeholder="title goes here"
 				ref={title}
+				spellCheck="false"
 			/>
 			<EditorContent
 				spellCheck={false}

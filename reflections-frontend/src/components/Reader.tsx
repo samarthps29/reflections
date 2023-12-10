@@ -6,6 +6,19 @@ import Typography from "@tiptap/extension-typography";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Link, useLocation, useParams } from "react-router-dom";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import cpp from "highlight.js/lib/languages/cpp";
+import js from "highlight.js/lib/languages/javascript";
+import python from "highlight.js/lib/languages/python";
+import { createLowlight } from "lowlight";
+import { SmilieReplacer } from "./Tiptap/SmilieReplacer";
+
+const lowlight = createLowlight();
+lowlight.register("cpp", cpp);
+lowlight.register("py", python);
+lowlight.register("js", js);
+
+// console.log(lowlight.listLanguages());
 
 const Reader = () => {
 	const params = useParams();
@@ -28,7 +41,13 @@ const Reader = () => {
 					keepMarks: true,
 					keepAttributes: false,
 				},
+				codeBlock: false,
 			}),
+			CodeBlockLowlight.configure({
+				languageClassPrefix: "language-",
+				lowlight,
+			}),
+			SmilieReplacer,
 		],
 
 		content: noteValue,
