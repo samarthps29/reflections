@@ -102,6 +102,7 @@ const UserSignupPage = () => {
 								: "bg-[#89375f] text-white"
 						}`}
 						type="submit"
+						disabled={buttonText !== "Sign up"}
 					>
 						{buttonText}
 					</button>

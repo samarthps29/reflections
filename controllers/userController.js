@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
+const sgMail = require("@sendgrid/mail");
 
 const generateAccessToken = (user) => {
 	return jwt.sign(
@@ -111,41 +113,84 @@ const createUser = asyncHandler(async (req, res) => {
 });
 
 const updatePassword = asyncHandler(async (req, res) => {
-	const { userName, email, oldPassword, newPassword } = req.body;
-	if ((!userName && !email) || !oldPassword || !newPassword) {
+	const { id, password } = req.body;
+	if (!id || !password) {
 		res.status(400).json({ message: "All fields are mandatory" });
 	}
+	const user = await User.findById(id);
+	// console.log(user);
+	if (user) {
+		const hashedPassword = await bcrypt.hash(password, 10);
+		const updatedUser = await User.findByIdAndUpdate(
+			user.id,
+			{ password: hashedPassword },
+			{ new: true }
+		);
+		console.log("Updated User", updatedUser);
+		if (updatedUser) {
+			res.status(200).json({
+				message: "Password updated successfully",
+			});
+		} else {
+			res.status(400).json({
+				message: "Password could not be updated",
+			});
+		}
+	} else {
+		res.status(400).json({ message: "User does not exist" });
+	}
+});
 
+const resetPassword = asyncHandler(async (req, res) => {
+	const { userName, email } = req.body;
+	console.log(userName, email);
+	if (!userName && !email) {
+		res.status(400).json({ message: "All fields are mandatory" });
+	}
 	let user;
 	if (userName) {
 		user = await User.findOne({ userName });
 	} else {
 		user = await User.findOne({ email });
 	}
-
 	if (user) {
-		const match = await bcrypt.compare(oldPassword, user.password);
-		if (match) {
-			const updatedPassword = await bcrypt.hash(newPassword, 10);
-			const updatedUser = await User.findByIdAndUpdate(
-				user.id,
-				{ password: updatedPassword },
-				{ new: true }
-			);
-			if (updatedUser) {
-				res.status(200).json({
-					message: "Password updated successfully",
-				});
-			} else {
-				res.status(400).json({
-					message: "Password could not be updated",
-				});
-			}
-		} else {
-			res.status(403).json({ message: "Invalid old password" });
-		}
+		const token = jwt.sign({ id: user.id }, process.env.RESET_SECRET_KEY, {
+			expiresIn: "1h",
+		});
+		// send token as a link to email
+		sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+		const msg = {
+			to: user.email, // Change to your recipient
+			from: "samarthps29@gmail.com", // Change to your verified sender
+			subject: "Reflections Account Password Reset",
+			text: `Here is your password reset link - https://reflections.cyclic.app/updatePassword?resetToken=${token}`,
+		};
+		// console.log(msg);
+		sgMail
+			.send(msg)
+			.then(() => {
+				console.log("Email sent");
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		res.status(200).json({ message: "Email sent successfully" });
 	} else {
 		res.status(400).json({ message: "User does not exist" });
+	}
+});
+
+const checkResetToken = asyncHandler(async (req, res) => {
+	const { resetToken } = req.body;
+	if (resetToken) {
+		jwt.verify(resetToken, process.env.RESET_SECRET_KEY, (err, decoded) => {
+			if (err) {
+				res.status(400).json({ message: "Invalid token" });
+			}
+			res.status(200).json({ id: decoded.id });
+		});
+	} else {
+		res.status(400).json({ message: "No token provided" });
 	}
 });
 
@@ -154,5 +199,7 @@ module.exports = {
 	userLogout,
 	createUser,
 	updatePassword,
+	resetPassword,
+	checkResetToken,
 	generateNewToken,
 };

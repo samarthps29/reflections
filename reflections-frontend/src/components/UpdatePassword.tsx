@@ -1,17 +1,38 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import userServices from "../api/userServices";
 
-const usernameRegex = /^[a-zA-Z0-9_]+$/;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 const UpdatePassword = () => {
-	const userNameRef = useRef<HTMLInputElement>(null);
-	const oldPasswordRef = useRef<HTMLInputElement>(null);
-	const newPasswordRef = useRef<HTMLInputElement>(null);
+	const [searchParams, _] = useSearchParams();
+	const passwordRef = useRef<HTMLInputElement>(null);
+	const confirmPasswordRef = useRef<HTMLInputElement>(null);
 	const [buttonText, setButtonText] = useState("Change Password");
-	const [error, setError] = useState(false);
+	const [isChecking, setIsChecking] = useState(false);
+	const [error, setError] = useState(true);
 	const navigate = useNavigate();
+	const resetToken = searchParams.get("resetToken");
+	const [id, setId] = useState("");
+
+	useEffect(() => {
+		setIsChecking(true);
+		userServices
+			.post("/checkResetToken", { resetToken })
+			.then((res) => {
+				console.log("Valid reset token");
+				setError(false);
+				setId(res.data.id);
+				setIsChecking(false);
+			})
+			.catch(() => {
+				navigate("/message", {
+					state: {
+						message: "This link is no longer valid.",
+						// secondaryMessage: "",
+					},
+				});
+			});
+	}, []);
+
 	return (
 		<div className="flex h-screen w-screen items-center justify-center bg-[#1c1c1c]">
 			<div className="fixed -top-20 left-20 z-0 rotate-180 -scale-x-100 font-inter text-[150px] font-bold tracking-widest text-[#f1f1f1]">
@@ -25,32 +46,31 @@ const UpdatePassword = () => {
 					name="updatepasswordform"
 					onSubmit={(e) => {
 						e.preventDefault();
-						let body: any = {};
-						const test1 = emailRegex.test(
-								userNameRef.current!.value
-							),
-							test2 = usernameRegex.test(
-								userNameRef.current!.value
-							);
-						if (test1 || test2) {
-							if (test1) {
-								body["email"] = userNameRef.current!.value;
-							} else {
-								body["userName"] = userNameRef.current!.value;
-							}
+						if (
+							passwordRef.current!.value ===
+							confirmPasswordRef.current!.value
+						) {
 							setButtonText("Loading...");
 							userServices
 								.put("/updatePassword", {
-									...body,
-									oldPassword: oldPasswordRef.current?.value,
-									newPassword: newPasswordRef.current?.value,
+									id: id,
+									password: passwordRef.current?.value,
 								})
 								.then(() => {
+									console.log("Password updated");
 									setButtonText("Change Password");
-									navigate("/login");
+									navigate("/message", {
+										state: {
+											message:
+												"Password has been updated successfully.",
+											secondaryMessage:
+												"Log in to your account with the new password.",
+										},
+									});
 								})
 								.catch((err) => {
-									console.log(err.response.data.message);
+									console.log("Password could not updated");
+									console.log(err);
 									setError(true);
 									setButtonText("Change Password");
 								});
@@ -64,30 +84,23 @@ const UpdatePassword = () => {
 					</div>
 
 					<input
-						type="text"
-						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
-						placeholder="Username"
-						autoComplete="off"
-						ref={userNameRef}
-						required
-						spellCheck={false}
-					/>
-					<input
 						type="password"
 						className="text-md mb-2 w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
-						placeholder="Old Password"
+						placeholder="Password"
 						autoComplete="off"
-						ref={oldPasswordRef}
+						ref={passwordRef}
 						required
+						disabled={isChecking}
 						spellCheck={false}
 					/>
 					<input
 						type="password"
 						className="text-md w-full rounded-lg bg-[#2e2e2e] p-2 font-serif text-[#f0f8ff] focus:bg-[#2e2e2e] focus:outline-none"
-						placeholder="New Password"
+						placeholder="Confirm Password"
 						autoComplete="off"
-						ref={newPasswordRef}
+						ref={confirmPasswordRef}
 						required
+						disabled={isChecking}
 						spellCheck={false}
 					/>
 					<button
@@ -97,6 +110,9 @@ const UpdatePassword = () => {
 								: "bg-[#89375f] text-white"
 						}`}
 						type="submit"
+						disabled={
+							buttonText !== "Change Password" && isChecking
+						}
 					>
 						{buttonText}
 					</button>

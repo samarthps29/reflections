@@ -95,6 +95,7 @@ const UserLoginPage = () => {
 								: "bg-[#89375f] text-white"
 						} px-3 py-2 font-serif font-bold `}
 						type="submit"
+						disabled={buttonText !== "Sign in"}
 					>
 						{buttonText}
 					</button>
@@ -102,10 +103,16 @@ const UserLoginPage = () => {
 					<div className="mt-1 flex w-full justify-end">
 						<Link
 							className="font-serif text-xs text-[#e9e9e9]"
-							to="/updatePassword"
+							to="/resetPassword"
 						>
 							Forgot Password
 						</Link>
+						{/* <Link
+							className="font-serif text-xs text-[#e9e9e9]"
+							to="/changePassword"
+						>
+							Change Password
+						</Link> */}
 					</div>
 
 					<div className="w-full text-center">

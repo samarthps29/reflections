@@ -292,6 +292,9 @@ const Tiptap = ({
 					keepAttributes: false,
 				},
 				codeBlock: false,
+				dropcursor: false,
+				gapcursor: false,
+				hardBreak: false,
 			}),
 			SmilieReplacer,
 			CodeBlockLowlight.configure({
