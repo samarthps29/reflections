@@ -6,6 +6,8 @@ const {
 	userLogout,
 	createUser,
 	updatePassword,
+	resetPassword,
+	checkResetToken,
 	generateNewToken,
 } = require("../controllers/userController");
 
