@@ -11,7 +11,7 @@ import cpp from "highlight.js/lib/languages/cpp";
 import js from "highlight.js/lib/languages/javascript";
 import python from "highlight.js/lib/languages/python";
 import { createLowlight } from "lowlight";
-import { SmilieReplacer } from "./Tiptap/SmilieReplacer";
+import { SmilieReplacer } from "../components/Tiptap/SmilieReplacer";
 
 const lowlight = createLowlight();
 lowlight.register("cpp", cpp);
@@ -20,7 +20,7 @@ lowlight.register("js", js);
 
 // console.log(lowlight.listLanguages());
 
-const Reader = () => {
+const ReaderPage = () => {
 	const params = useParams();
 	const location = useLocation();
 	const noteValue = location.state?.value,
@@ -77,4 +77,4 @@ const Reader = () => {
 	);
 };
 
-export default Reader;
+export default ReaderPage;

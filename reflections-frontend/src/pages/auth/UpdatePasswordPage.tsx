@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import userServices from "../api/userServices";
+import userServices from "../../api/userServices";
 
-const UpdatePassword = () => {
+const UpdatePasswordPage = () => {
 	const [searchParams, _] = useSearchParams();
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const confirmPasswordRef = useRef<HTMLInputElement>(null);
@@ -121,4 +121,4 @@ const UpdatePassword = () => {
 		</div>
 	);
 };
-export default UpdatePassword;
+export default UpdatePasswordPage;

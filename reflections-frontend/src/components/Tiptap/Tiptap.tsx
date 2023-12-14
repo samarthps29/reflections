@@ -322,8 +322,7 @@ const Tiptap = ({
 	};
 
 	return (
-		// bg-[#1f1f1f]
-		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1f1f1f]">
+		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1e1e1e]">
 			<MenuBar editor={editor} />
 			<input
 				className="mx-8 mt-8 flex w-1/2 border-b-2 border-[#515151] bg-transparent text-xl font-semibold text-[#dadada] sm:w-2/5 md:w-1/4"

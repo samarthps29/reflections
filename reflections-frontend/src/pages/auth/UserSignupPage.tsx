@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import userServices from "../api/userServices";
+import userServices from "../../api/userServices";
 
 const nameRegex = /^[a-zA-Z\s]+$/;
 const usernameRegex = /^[a-zA-Z0-9_]+$/;

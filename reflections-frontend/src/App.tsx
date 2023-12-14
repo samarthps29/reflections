@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import NotesPage from "./components/NotesPage";
-import Reader from "./components/Reader";
-import ResetPassword from "./components/ResetPassword";
-import UserLoginPage from "./components/UserLoginPage";
-import UserSignupPage from "./components/UserSignupPage";
+import NotesPage from "./pages/NotesPage";
+import Reader from "./pages/ReaderPage";
+import ResetPassword from "./pages/auth/ResetPasswordPage";
+import UserLoginPage from "./pages/auth/UserLoginPage";
+import UserSignupPage from "./pages/auth/UserSignupPage";
 import HandleRouteNotFound from "./utility/HandleRouteNotFound";
-import UpdatePassword from "./components/UpdatePassword";
+import UpdatePassword from "./pages/auth/UpdatePasswordPage";
 import Message from "./components/Message";
 
 function App() {
