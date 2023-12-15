@@ -6,7 +6,7 @@ import UserLoginPage from "./pages/auth/UserLoginPage";
 import UserSignupPage from "./pages/auth/UserSignupPage";
 import HandleRouteNotFound from "./utility/HandleRouteNotFound";
 import UpdatePassword from "./pages/auth/UpdatePasswordPage";
-import Message from "./components/Message";
+import MessagePage from "./pages/MessagePage";
 
 function App() {
 	return (
@@ -17,7 +17,8 @@ function App() {
 			<Route path="/signup" element={<UserSignupPage />} />
 			<Route path="/updatePassword" element={<UpdatePassword />} />
 			<Route path="/resetPassword" element={<ResetPassword />} />
-			<Route path="message" element={<Message />} />
+			<Route path="/message" element={<MessagePage />} />
+
 			<Route path="*" element={<HandleRouteNotFound />} />
 		</Routes>
 	);

@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 
-const Message = () => {
+const MessagePage = () => {
 	const location = useLocation();
 	const message = location.state.message;
 	const secondaryMessage = location.state.secondaryMessage;
@@ -26,4 +26,4 @@ const Message = () => {
 		</div>
 	);
 };
-export default Message;
+export default MessagePage;
