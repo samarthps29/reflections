@@ -1,13 +1,15 @@
 import dayjs, { Dayjs } from "dayjs";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import contentServices from "../api/contentServices";
 import Tiptap from "../components/Tiptap/Tiptap";
 import ConfirmDialogBox from "../components/ConfirmDialogBox";
 import BottomNavBar from "../components/BottomNavBar";
 import SideBarNoteItem from "../components/SideBarNoteItem";
+import SearchModal from "../components/SearchModal";
+import { command } from "../constants/Commands";
 
-type note = {
+export type note = {
 	_id: string;
 	title: string;
 	notesContent: string;
@@ -32,7 +34,7 @@ const NotesPage = () => {
 	const [isSaving, setIsSaving] = useState("Save");
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [confirmSave, setConfirmSave] = useState(false);
-	const [_, setCurrNoteValue] = useState("");
+	const [currNoteValue, setCurrNoteValue] = useState("");
 	const [recentsCount, setRecentsCount] = useState(() => {
 		const cnt = localStorage.getItem("recentsCount");
 		const defaultVal = 10000000;
@@ -43,6 +45,8 @@ const NotesPage = () => {
 			return defaultVal;
 		}
 	});
+	const [showModalSearch, setShowModalSearch] = useState(false);
+	const [btnId, setBtnId] = useState({ id: "", status: true });
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -161,18 +165,16 @@ const NotesPage = () => {
 	}
 
 	function handleCheckNoteSave() {
-		// console.log("value of confirm save is ", confirmSave);
+		// TODO: use callback hook here as well
 		return new Promise((resolve) => {
 			const checkInterval = setInterval(() => {
 				let x: Boolean = true;
 				setConfirmSave((prev) => {
-					// console.log("first value of prev is ", prev);
 					x = prev;
 					return prev;
 				});
 
 				if (!x) {
-					// console.log("yesss");
 					clearInterval(checkInterval);
 					resolve("resolve confirmed");
 				}
@@ -188,27 +190,29 @@ const NotesPage = () => {
 		});
 	}
 
-	function handleSideBarItemClick(item: note) {
-		let x: string = "",
-			y: string = "";
-		setCurrNoteValue((prev) => {
-			x = prev;
-			return prev;
-		});
-		setEditorValue((prev) => {
-			y = prev;
-			return prev;
-		});
-
-		if (x !== y) {
-			// console.log(
-			// 	"values differ"
-			// );
-			setConfirmSave(true);
-			handleCheckNoteSave().then(() => {
+	const handleSideBarItemClick = useCallback(
+		(item: note) => {
+			if (currNoteValue !== editorValue) {
+				setConfirmSave(true);
 				// console.log(
 				// 	"dialog box appears"
 				// );
+
+				// function is required so that we can wait until the dialog box
+				// disappears and then continue as normal
+				// TODO: is there a better way?
+				handleCheckNoteSave().then(() => {
+					title.current!.value = item.title;
+					setEditorValue(item.notesContent);
+					setCurrNoteValue(item.notesContent);
+					setCurrNoteID(item._id);
+					setChangeNote(true);
+					setLastUpdate(() => {
+						if (item.date) return dayjs(item.date);
+						else return null;
+					});
+				});
+			} else {
 				title.current!.value = item.title;
 				setEditorValue(item.notesContent);
 				setCurrNoteValue(item.notesContent);
@@ -218,19 +222,35 @@ const NotesPage = () => {
 					if (item.date) return dayjs(item.date);
 					else return null;
 				});
-			});
-		} else {
-			title.current!.value = item.title;
-			setEditorValue(item.notesContent);
-			setCurrNoteValue(item.notesContent);
-			setCurrNoteID(item._id);
-			setChangeNote(true);
-			setLastUpdate(() => {
-				if (item.date) return dayjs(item.date);
-				else return null;
-			});
-		}
+			}
+		},
+		[editorValue, currNoteValue]
+	);
+
+	function handleCommandClick(item: command) {
+		setBtnId((prev) => {
+			return { id: item.id, status: !prev.status };
+		});
 	}
+
+	const keyDownHandler = (e: KeyboardEvent) => {
+		if (e.key === "Escape") {
+			setShowModalSearch(false);
+			setConfirmDelete(false);
+			setConfirmSave(false);
+		}
+		if (e.ctrlKey && (e.key === "k" || e.key === "K")) {
+			e.preventDefault();
+			setShowModalSearch((prev) => !prev);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener("keydown", keyDownHandler);
+		return () => {
+			window.removeEventListener("keydown", keyDownHandler);
+		};
+	}, []);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -271,15 +291,15 @@ const NotesPage = () => {
 	}, [recentsCount]);
 
 	return (
-		<div
-			className="min-w-screen flex h-screen justify-center"
-			onKeyDown={(e) => {
-				if (e.key === "Escape") {
-					setConfirmDelete(false);
-					setConfirmSave(false);
-				}
-			}}
-		>
+		<div className="min-w-screen flex h-screen justify-center">
+			{showModalSearch && (
+				<SearchModal
+					notesArr={recentResults}
+					handleNoteClick={handleSideBarItemClick}
+					handleCommandClick={handleCommandClick}
+					setShowModal={setShowModalSearch}
+				/>
+			)}
 			{confirmDelete && (
 				<ConfirmDialogBox
 					message="Are you sure you want to delete this note?"
@@ -311,7 +331,7 @@ const NotesPage = () => {
 			)}
 
 			{showSideBar && (
-				<div className="lg:1/4 md:1/3 flex h-screen w-3/4 flex-col items-center border-r-[1px] border-[#515151] bg-[#1e1e1e] sm:w-2/5">
+				<div className="lg:1/4 md:1/3 flex h-screen w-full flex-col items-center border-r-[1px] border-[#515151] bg-[#1e1e1e] sm:w-2/5">
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
@@ -433,7 +453,7 @@ const NotesPage = () => {
 												}
 												textA={item.title}
 												textB={index + 1}
-												key={item._id}
+												keyVal={item._id}
 												lastEditTime={dayjs(
 													item.date
 												).format("DD-MMM, HH:mm")}
@@ -458,7 +478,7 @@ const NotesPage = () => {
 
 			<div
 				className={`flex ${
-					showSideBar ? "w-1/4 sm:w-3/5 md:w-2/3 lg:w-3/4" : "w-full"
+					showSideBar ? "w-0 sm:w-3/5 md:w-2/3 lg:w-3/4" : "w-full"
 				}`}
 			>
 				<Tiptap
@@ -467,6 +487,7 @@ const NotesPage = () => {
 					setEditorValue={setEditorValue}
 					changeNote={changeNote}
 					setChangeNote={setChangeNote}
+					btnId={btnId}
 				/>
 			</div>
 

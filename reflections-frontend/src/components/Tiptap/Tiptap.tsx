@@ -30,6 +30,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 		<div className="flex justify-center text-[17px]">
 			<div className="customScroll mx-8 mt-8 flex gap-1 overflow-auto rounded-lg bg-[#363636] px-1 py-[5px] text-[#a1a1a1]">
 				<button
+					id="btn-bold"
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					disabled={!editor.can().chain().focus().toggleBold().run()}
 					className={`flex ${
@@ -39,6 +40,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					bold
 				</button>
 				<button
+					id="btn-italic"
 					onClick={() => editor.chain().focus().toggleItalic().run()}
 					disabled={
 						!editor.can().chain().focus().toggleItalic().run()
@@ -50,6 +52,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					italic
 				</button>
 				<button
+					id="btn-strike"
 					onClick={() => editor.chain().focus().toggleStrike().run()}
 					disabled={
 						!editor.can().chain().focus().toggleStrike().run()
@@ -61,6 +64,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					strike
 				</button>
 				<button
+					id="btn-code"
 					onClick={() => editor.chain().focus().toggleCode().run()}
 					disabled={!editor.can().chain().focus().toggleCode().run()}
 					className={`flex ${
@@ -79,6 +83,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					paragraph
 				</button>
 				<button
+					id="btn-bullet"
 					onClick={() =>
 						editor.chain().focus().toggleBulletList().run()
 					}
@@ -269,9 +274,11 @@ const Tiptap = ({
 	title,
 	changeNote,
 	setChangeNote,
+	btnId,
 }: {
 	editorValue: string;
 	setEditorValue: React.Dispatch<React.SetStateAction<string>>;
+	btnId: { id: string; status: boolean };
 	title: React.RefObject<HTMLInputElement>;
 	changeNote: Boolean;
 	setChangeNote: React.Dispatch<React.SetStateAction<boolean>>;
@@ -320,6 +327,11 @@ const Tiptap = ({
 	const handleChange = (newContent: string) => {
 		setEditorValue(newContent);
 	};
+
+	useEffect(() => {
+		const element = document.getElementById(btnId.id);
+		if (element) element.click();
+	}, [btnId]);
 
 	return (
 		<div className="customScroll flex h-full w-full flex-col gap-5 overflow-auto bg-[#1e1e1e]">
