@@ -278,7 +278,7 @@ const Tiptap = ({
 }: {
 	editorValue: string;
 	setEditorValue: React.Dispatch<React.SetStateAction<string>>;
-	btnId: string;
+	btnId: { id: string; status: boolean };
 	title: React.RefObject<HTMLInputElement>;
 	changeNote: Boolean;
 	setChangeNote: React.Dispatch<React.SetStateAction<boolean>>;
@@ -329,7 +329,7 @@ const Tiptap = ({
 	};
 
 	useEffect(() => {
-		const element = document.getElementById(btnId);
+		const element = document.getElementById(btnId.id);
 		if (element) element.click();
 	}, [btnId]);
 

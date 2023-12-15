@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { note } from "../pages/NotesPage";
 import { commandsArr } from "../constants/Commands";
 import { command } from "../constants/Commands";
+import dayjs from "dayjs";
 
 export type dataItem = {
 	title: string;
@@ -33,7 +34,6 @@ const SearchModal = ({
 
 	// dataArr is the combination of notes and commands
 	// data is the filtered list from dataArr based on search query
-
 	function convertToNote(item: dataItem) {
 		let temp: note = {
 			_id: "",
@@ -60,59 +60,40 @@ const SearchModal = ({
 		return temp;
 	}
 
-	function keyDownHandler(e: KeyboardEvent) {
-		let dataArrLocal: dataItem[];
-		setData((prev) => {
-			dataArrLocal = prev;
-			return prev;
-		});
-		switch (e.key) {
-			case "ArrowDown":
-				e.preventDefault();
-				setSelectedItemIndex((prev) => {
-					if (prev === dataArrLocal.length - 1) return prev;
-					else return prev + 1;
-				});
-				break;
-			case "ArrowUp":
-				e.preventDefault();
-				setSelectedItemIndex((prev) => {
-					if (prev === 0) return prev;
-					else return prev - 1;
-				});
-				break;
-			// case "Enter":
-			// 	e.preventDefault();
-			// 	setSelectedItemIndex((prev) => {
-			// 		// console.log(dataArrLocal);
-			// 		if (dataArrLocal[prev].type === "note") {
-			// 			handleNoteClick(convertToNote(dataArrLocal[prev]));
-			// 		} else {
-			// 			handleCommandClick(
-			// 				convertToCommand(dataArrLocal[prev])
-			// 			);
-			// 			// console.log(dataArrLocal[prev].id!);
-			// 			// setBtnId(dataArrLocal[prev].id!);
-			// 		}
-			// 		setShowModal(false);
-			// 		return prev;
-			// 	});
-			// 	break;
-			case "Enter":
-				e.preventDefault();
-				console.log(data);
-				if (data[selectedItemIndex].type === "note") {
-					handleNoteClick(convertToNote(data[selectedItemIndex]));
-				} else {
-					handleCommandClick(
-						convertToCommand(data[selectedItemIndex])
-					);
-				}
-				setShowModal(false);
-				break;
-		}
-	}
-	
+	const keyDownHandler = useCallback(
+		(e: KeyboardEvent) => {
+			switch (e.key) {
+				case "ArrowDown":
+					e.preventDefault();
+					setSelectedItemIndex((prev) => {
+						if (prev === data.length - 1) return prev;
+						else return prev + 1;
+					});
+					break;
+				case "ArrowUp":
+					e.preventDefault();
+					setSelectedItemIndex((prev) => {
+						if (prev === 0) return prev;
+						else return prev - 1;
+					});
+					break;
+
+				case "Enter":
+					e.preventDefault();
+					if (data[selectedItemIndex].type === "note") {
+						handleNoteClick(convertToNote(data[selectedItemIndex]));
+					} else {
+						handleCommandClick(
+							convertToCommand(data[selectedItemIndex])
+						);
+					}
+					setShowModal(false);
+					break;
+			}
+		},
+		[data, selectedItemIndex]
+	);
+
 	useEffect(() => {
 		setDataArr([
 			...notesArr.map((item) => {
@@ -172,7 +153,7 @@ const SearchModal = ({
 		return () => {
 			window.removeEventListener("keydown", keyDownHandler);
 		};
-	}, []);
+	}, [keyDownHandler]);
 
 	return (
 		<div
@@ -216,7 +197,6 @@ const SearchModal = ({
 											handleCommandClick(
 												convertToCommand(item)
 											);
-											// setBtnId(item.id!);
 										}
 										setShowModal(false);
 									}}
@@ -233,7 +213,9 @@ const SearchModal = ({
 										<p className="text-[#e5e2e2]">
 											{`${
 												item.type === "note"
-													? item.date
+													? dayjs(item.date).format(
+															"dddd, DD MMM YYYY hh:mm A"
+													  )
 													: item.title
 											}`}
 										</p>

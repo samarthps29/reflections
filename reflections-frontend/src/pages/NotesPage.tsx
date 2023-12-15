@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import contentServices from "../api/contentServices";
 import Tiptap from "../components/Tiptap/Tiptap";
@@ -34,7 +34,7 @@ const NotesPage = () => {
 	const [isSaving, setIsSaving] = useState("Save");
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [confirmSave, setConfirmSave] = useState(false);
-	const [_, setCurrNoteValue] = useState("");
+	const [currNoteValue, setCurrNoteValue] = useState("");
 	const [recentsCount, setRecentsCount] = useState(() => {
 		const cnt = localStorage.getItem("recentsCount");
 		const defaultVal = 10000000;
@@ -46,7 +46,7 @@ const NotesPage = () => {
 		}
 	});
 	const [showModalSearch, setShowModalSearch] = useState(false);
-	const [btnId, setBtnId] = useState("");
+	const [btnId, setBtnId] = useState({ id: "", status: true });
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -165,18 +165,16 @@ const NotesPage = () => {
 	}
 
 	function handleCheckNoteSave() {
-		// console.log("value of confirm save is ", confirmSave);
+		// TODO: use callback hook here as well
 		return new Promise((resolve) => {
 			const checkInterval = setInterval(() => {
 				let x: Boolean = true;
 				setConfirmSave((prev) => {
-					// console.log("first value of prev is ", prev);
 					x = prev;
 					return prev;
 				});
 
 				if (!x) {
-					// console.log("yesss");
 					clearInterval(checkInterval);
 					resolve("resolve confirmed");
 				}
@@ -192,27 +190,29 @@ const NotesPage = () => {
 		});
 	}
 
-	function handleSideBarItemClick(item: note) {
-		let x: string = "",
-			y: string = "";
-		setCurrNoteValue((prev) => {
-			x = prev;
-			return prev;
-		});
-		setEditorValue((prev) => {
-			y = prev;
-			return prev;
-		});
-
-		if (x !== y) {
-			// console.log(
-			// 	"values differ"
-			// );
-			setConfirmSave(true);
-			handleCheckNoteSave().then(() => {
+	const handleSideBarItemClick = useCallback(
+		(item: note) => {
+			if (currNoteValue !== editorValue) {
+				setConfirmSave(true);
 				// console.log(
 				// 	"dialog box appears"
 				// );
+
+				// function is required so that we can wait until the dialog box
+				// disappears and then continue as normal
+				// TODO: is there a better way?
+				handleCheckNoteSave().then(() => {
+					title.current!.value = item.title;
+					setEditorValue(item.notesContent);
+					setCurrNoteValue(item.notesContent);
+					setCurrNoteID(item._id);
+					setChangeNote(true);
+					setLastUpdate(() => {
+						if (item.date) return dayjs(item.date);
+						else return null;
+					});
+				});
+			} else {
 				title.current!.value = item.title;
 				setEditorValue(item.notesContent);
 				setCurrNoteValue(item.notesContent);
@@ -222,22 +222,15 @@ const NotesPage = () => {
 					if (item.date) return dayjs(item.date);
 					else return null;
 				});
-			});
-		} else {
-			title.current!.value = item.title;
-			setEditorValue(item.notesContent);
-			setCurrNoteValue(item.notesContent);
-			setCurrNoteID(item._id);
-			setChangeNote(true);
-			setLastUpdate(() => {
-				if (item.date) return dayjs(item.date);
-				else return null;
-			});
-		}
-	}
+			}
+		},
+		[editorValue, currNoteValue]
+	);
 
 	function handleCommandClick(item: command) {
-		setBtnId(item.id);
+		setBtnId((prev) => {
+			return { id: item.id, status: !prev.status };
+		});
 	}
 
 	const keyDownHandler = (e: KeyboardEvent) => {
@@ -249,7 +242,6 @@ const NotesPage = () => {
 		if (e.ctrlKey && (e.key === "k" || e.key === "K")) {
 			e.preventDefault();
 			setShowModalSearch((prev) => !prev);
-			// console.log("You just pressed Control and K!");
 		}
 	};
 
