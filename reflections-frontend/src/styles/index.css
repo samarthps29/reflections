@@ -49,3 +49,7 @@ input:-webkit-autofill:active {
 .logoutBtn {
 	text-shadow: 0 0 1px #1c1917;
 }
+
+.selectedBtn {
+	text-shadow: 0 0 1px #ffffff;
+}

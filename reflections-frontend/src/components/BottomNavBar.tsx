@@ -1,3 +1,9 @@
+import {
+	countWords,
+	countCharacters,
+	removeHtmlTags,
+} from "../utility/utility";
+
 type BottomNavBarProps = {
 	sideBarText: string;
 	clearText: string;
@@ -6,6 +12,7 @@ type BottomNavBarProps = {
 	readingModeText: string;
 	saveStatusText: string;
 	saveTimeText: string;
+	editorValue: string;
 	sideBarFunction: () => void;
 	clearFunction: () => void;
 	newFunction: () => void;
@@ -25,6 +32,7 @@ const BottomNavBar = ({
 	readingModeText,
 	saveStatusText,
 	saveTimeText,
+	editorValue,
 	sideBarFunction,
 	clearFunction,
 	newFunction,
@@ -36,7 +44,7 @@ const BottomNavBar = ({
 	enableReadingMode,
 }: BottomNavBarProps) => {
 	return (
-		<div className="fixed bottom-0 flex w-full justify-between bg-[#3c3e41] px-1 py-[1.5px]">
+		<div className="fixed bottom-0 flex w-full justify-between bg-[#3c3e41] px-1 py-[1.5px] ">
 			{/* why do we require flex here?? */}
 			<div className="left-0 flex">
 				<button
@@ -66,6 +74,10 @@ const BottomNavBar = ({
 				</button>
 			</div>
 
+			<div className="hidden font-inter text-xs tracking-wider text-white md:block">
+				{countWords(removeHtmlTags(editorValue))} Words{" "}
+				{countCharacters(removeHtmlTags(editorValue))} Characters
+			</div>
 			<div className="right-0 flex">
 				<button
 					className="mr-4 font-inter text-xs tracking-wider text-white"
@@ -75,13 +87,13 @@ const BottomNavBar = ({
 					{readingModeText}
 				</button>
 				<button
-					className="sm:mr-4 font-inter text-xs tracking-wider text-white"
+					className="font-inter text-xs tracking-wider text-white sm:mr-4"
 					onClick={saveStatusFunction}
 					disabled={enableSave}
 				>
 					{saveStatusText}
 				</button>
-				<p className="font-inter text-xs tracking-wider text-white hidden sm:block">
+				<p className="hidden font-inter text-xs tracking-wider text-white sm:block">
 					Last saved: {saveTimeText}
 				</p>
 			</div>

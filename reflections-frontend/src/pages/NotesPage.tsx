@@ -440,7 +440,7 @@ const NotesPage = () => {
 									<button
 										className={`${
 											selectedOption === 0 &&
-											"font-semibold text-[#dadada]"
+											"selectedBtn text-[#dadada]"
 										}`}
 										onClick={() => setSelectedOption(0)}
 									>
@@ -450,13 +450,17 @@ const NotesPage = () => {
 									<button
 										className={`${
 											selectedOption === 1 &&
-											"font-semibold text-[#dadada]"
+											"selectedBtn text-[#dadada]"
 										}`}
 										onClick={() => setSelectedOption(1)}
 									>
 										Results{" "}
 									</button>
 									<button
+										className={`${
+											selectedOption === 1 &&
+											"selectedBtn text-[#dadada]"
+										}`}
 										onClick={() => {
 											setSearchParamValue((prev) => {
 												if (prev === "title")
@@ -465,14 +469,14 @@ const NotesPage = () => {
 											});
 										}}
 									>
-										(
+										[
 										{searchParamValue === "title"
 											? "T"
 											: "C"}
-										)
+										]
 									</button>
 								</div>
-								<div className="flex whitespace-pre-wrap text-[#a1a1a1]">
+								<div className="flex whitespace-pre-wrap text-sm text-[#a1a1a1]">
 									{/* TODO: change this to a button component */}
 									<button
 										className={`${
@@ -591,6 +595,7 @@ const NotesPage = () => {
 			</div>
 
 			<BottomNavBar
+				editorValue={editorValue}
 				sideBarText={showSideBar ? "Hide Sidebar" : "Show Sidebar"}
 				sideBarFunction={() => {
 					setShowSideBar((prev) => !prev);
