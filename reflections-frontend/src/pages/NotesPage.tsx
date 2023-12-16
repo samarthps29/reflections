@@ -303,6 +303,11 @@ const NotesPage = () => {
 		handleReader();
 	};
 
+	const keyDownHandlerDelete = (e: globalThis.KeyboardEvent) => {
+		e.preventDefault();
+		setConfirmDelete(true);
+	};
+
 	useEffect(() => {
 		setIsLoading(true);
 		contentServices
@@ -353,6 +358,7 @@ const NotesPage = () => {
 
 	useHotkeys(["ctrl+s", "ctrl+S"], keyDownHandlerSave);
 	useHotkeys(["ctrl+shift+c", "ctrl+shift+C"], keyDownHandlerClear);
+	useHotkeys(["ctrl+shift+d", "ctrl+shift+D"], keyDownHandlerDelete);
 	useHotkeys(["ctrl+shift+z", "ctrl+shift+Z"], keyDownHandlerReader, [
 		currNoteID,
 		editorValue,
