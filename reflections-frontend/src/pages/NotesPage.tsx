@@ -20,7 +20,7 @@ export type note = {
 
 const NotesPage = () => {
 	const [editorValue, setEditorValue] = useState<string>("");
-	const [searchParamValue, setSearchParamValue] = useState("title");
+	const [searchParamValue, setSearchParamValue] = useState("content");
 	const searchInput = useRef<HTMLInputElement>(null);
 	const title = useRef<HTMLInputElement>(null);
 	const [searchResults, setSearchResults] = useState<note[]>([]);
@@ -435,7 +435,22 @@ const NotesPage = () => {
 					/>
 					<div className="flex h-full w-full flex-col items-center overflow-auto">
 						<div className="flex h-full w-11/12 flex-col items-start">
-							<div className="mb-2 mt-4 flex w-full items-center justify-between">
+							<div className="mt-2.5 flex w-full items-center justify-between text-sm text-[#a1a1a1]">
+								<button
+									onClick={() => {
+										setSearchParamValue((prev) => {
+											if (prev === "title")
+												return "content";
+											else return "title";
+										});
+									}}
+								>
+									{searchParamValue === "title"
+										? "Search by Heading"
+										: "Search by Content"}
+								</button>
+							</div>
+							<div className="mb-2  flex w-full items-center justify-between">
 								<div className="flex whitespace-pre-wrap text-sm text-[#a1a1a1]">
 									<button
 										className={`${
@@ -456,7 +471,7 @@ const NotesPage = () => {
 									>
 										Results{" "}
 									</button>
-									<button
+									{/* <button
 										className={`${
 											selectedOption === 1 &&
 											"selectedBtn text-[#dadada]"
@@ -474,7 +489,7 @@ const NotesPage = () => {
 											? "T"
 											: "C"}
 										]
-									</button>
+									</button> */}
 								</div>
 								<div className="flex whitespace-pre-wrap text-sm text-[#a1a1a1]">
 									{/* TODO: change this to a button component */}
