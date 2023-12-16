@@ -2,7 +2,7 @@ type SideBarNoteItemProps = {
 	bgColor?: string;
 	textA: string;
 	textB?: number;
-	lastEditTime?: string;
+	textC?: string;
 	keyVal: string;
 	onClick: () => void;
 };
@@ -11,7 +11,7 @@ const SideBarNoteItem = ({
 	bgColor,
 	textA,
 	textB,
-	lastEditTime,
+	textC,
 	keyVal,
 	onClick,
 }: SideBarNoteItemProps) => {
@@ -25,8 +25,10 @@ const SideBarNoteItem = ({
 				<p className="text-[#e5e2e2]">{textA}</p>
 				{textB && <p className="text-[#bcbcbc]">#{textB}</p>}
 			</div>
-			{lastEditTime && (
-				<p className="text-[#bcbcbc]">Last Edited : {lastEditTime}</p>
+			{textC && (
+				<p className="overflow-hidden overflow-ellipsis whitespace-nowrap text-[#bcbcbc]">
+					{textC}
+				</p>
 			)}
 		</div>
 	);

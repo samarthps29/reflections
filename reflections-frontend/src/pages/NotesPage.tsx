@@ -9,6 +9,7 @@ import SearchModal from "../components/SearchModal";
 import SideBarNoteItem from "../components/SideBarNoteItem";
 import Tiptap from "../components/Tiptap/Tiptap";
 import { command } from "../constants/Commands";
+import { removeHtmlTags } from "../utility/utility";
 
 export type note = {
 	_id: string;
@@ -19,6 +20,7 @@ export type note = {
 
 const NotesPage = () => {
 	const [editorValue, setEditorValue] = useState<string>("");
+	const [searchParamValue, setSearchParamValue] = useState("title");
 	const searchInput = useRef<HTMLInputElement>(null);
 	const title = useRef<HTMLInputElement>(null);
 	const [searchResults, setSearchResults] = useState<note[]>([]);
@@ -304,7 +306,7 @@ const NotesPage = () => {
 	useEffect(() => {
 		setIsLoading(true);
 		contentServices
-			.get("/recents")
+			.post("/search", { searchParam: "date", searchArg: "" })
 			.then((res) => {
 				setIsLoading(false);
 				setRecentResults(res.data);
@@ -318,7 +320,10 @@ const NotesPage = () => {
 	useEffect(() => {
 		if (location.state !== null && location.state.noteID !== null) {
 			contentServices
-				.get("/search/" + location.state.noteID)
+				.post("/search", {
+					searchParam: "id",
+					searchArg: location.state.noteID,
+				})
 				.then((res) => {
 					setCurrNoteID(res.data._id);
 					setEditorValue(res.data.notesContent);
@@ -398,9 +403,9 @@ const NotesPage = () => {
 			)}
 
 			{showSideBar && (
-				<div className="md:1/3 flex h-screen w-full flex-col items-center border-r-[1px] border-[#484848] bg-[#1e1e1e] sm:w-2/5 lg:w-1/4">
+				<div className="flex h-screen w-full flex-col items-center border-r-[1px] border-[#484848] bg-[#1e1e1e] sm:w-2/5 md:w-1/3 lg:w-1/4">
 					<input
-						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
+						className="mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
 						spellCheck="false"
 						ref={searchInput}
@@ -412,7 +417,9 @@ const NotesPage = () => {
 								setTimeout(() => {
 									contentServices
 										.post("/search", {
-											title: searchInput.current?.value,
+											searchParam: searchParamValue,
+											searchArg:
+												searchInput.current?.value,
 										})
 										.then((res) => {
 											setIsLoading(false);
@@ -447,7 +454,22 @@ const NotesPage = () => {
 										}`}
 										onClick={() => setSelectedOption(1)}
 									>
-										Results
+										Results{" "}
+									</button>
+									<button
+										onClick={() => {
+											setSearchParamValue((prev) => {
+												if (prev === "title")
+													return "content";
+												else return "title";
+											});
+										}}
+									>
+										(
+										{searchParamValue === "title"
+											? "T"
+											: "C"}
+										)
 									</button>
 								</div>
 								<div className="flex whitespace-pre-wrap text-[#a1a1a1]">
@@ -522,9 +544,18 @@ const NotesPage = () => {
 												textA={item.title}
 												textB={index + 1}
 												keyVal={item._id}
-												lastEditTime={dayjs(
-													item.date
-												).format("DD-MMM, HH:mm")}
+												textC={
+													selectedOption === 0
+														? "Last Edited : " +
+														  dayjs(
+																item.date
+														  ).format(
+																"DD-MMM, HH:mm"
+														  )
+														: removeHtmlTags(
+																item.notesContent
+														  )
+												}
 											/>
 										);
 									})}

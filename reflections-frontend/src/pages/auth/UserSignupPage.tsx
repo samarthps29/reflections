@@ -1,10 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userServices from "../../api/userServices";
-
-const nameRegex = /^[a-zA-Z\s]+$/;
-const usernameRegex = /^[a-zA-Z0-9_]+$/;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { nameRegex, usernameRegex, emailRegex } from "../../utility/utility";
 
 const UserSignupPage = () => {
 	const nameRef = useRef<HTMLInputElement>(null);

@@ -75,13 +75,13 @@ const BottomNavBar = ({
 					{readingModeText}
 				</button>
 				<button
-					className="mr-4 font-inter text-xs tracking-wider text-white"
+					className="sm:mr-4 font-inter text-xs tracking-wider text-white"
 					onClick={saveStatusFunction}
 					disabled={enableSave}
 				>
 					{saveStatusText}
 				</button>
-				<p className="font-inter text-xs tracking-wider text-white">
+				<p className="font-inter text-xs tracking-wider text-white hidden sm:block">
 					Last saved: {saveTimeText}
 				</p>
 			</div>
