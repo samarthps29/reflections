@@ -1,12 +1,13 @@
 import dayjs, { Dayjs } from "dayjs";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { useLocation, useNavigate } from "react-router-dom";
 import contentServices from "../api/contentServices";
-import Tiptap from "../components/Tiptap/Tiptap";
-import ConfirmDialogBox from "../components/ConfirmDialogBox";
 import BottomNavBar from "../components/BottomNavBar";
-import SideBarNoteItem from "../components/SideBarNoteItem";
+import ConfirmDialogBox from "../components/ConfirmDialogBox";
 import SearchModal from "../components/SearchModal";
+import SideBarNoteItem from "../components/SideBarNoteItem";
+import Tiptap from "../components/Tiptap/Tiptap";
 import { command } from "../constants/Commands";
 
 export type note = {
@@ -50,11 +51,11 @@ const NotesPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	function handleNoteSave(
+	const handleNoteSave = (
 		title: string,
 		notesContent: string,
 		mover: Boolean = false
-	) {
+	) => {
 		if (!title) return;
 		const saveTime: Dayjs = dayjs();
 		if (currNoteID !== "") {
@@ -82,7 +83,7 @@ const NotesPage = () => {
 					});
 					sortNotes();
 					setTimeout(() => {
-						setIsSaving("Save Successful!");
+						setIsSaving("Update Successful");
 						setTimeout(() => {
 							setIsSaving("Save");
 						}, 1000);
@@ -90,7 +91,7 @@ const NotesPage = () => {
 				})
 				.catch(() => {
 					setTimeout(() => {
-						setIsSaving("Save Unsuccessful!");
+						setIsSaving("Update Unsuccessful");
 						setTimeout(() => {
 							setIsSaving("Save");
 						}, 1000);
@@ -122,7 +123,7 @@ const NotesPage = () => {
 					sortNotes();
 
 					setTimeout(() => {
-						setIsSaving("Save Successful!");
+						setIsSaving("Save Successful");
 						setTimeout(() => {
 							setIsSaving("Save");
 						}, 1000);
@@ -130,16 +131,16 @@ const NotesPage = () => {
 				})
 				.catch(() => {
 					setTimeout(() => {
-						setIsSaving("Save Unsuccessful!");
+						setIsSaving("Save Unsuccessful");
 						setTimeout(() => {
 							setIsSaving("Save");
 						}, 1000);
 					}, 1000);
 				});
 		}
-	}
+	};
 
-	function handleDeleteNote() {
+	const handleDeleteNote = () => {
 		contentServices
 			.delete(currNoteID)
 			.then(() => {
@@ -162,9 +163,9 @@ const NotesPage = () => {
 				console.log("An error occurred");
 			});
 		setConfirmDelete(false);
-	}
+	};
 
-	function handleCheckNoteSave() {
+	const handleCheckNoteSave = () => {
 		// TODO: use callback hook here as well
 		return new Promise((resolve) => {
 			const checkInterval = setInterval(() => {
@@ -180,19 +181,42 @@ const NotesPage = () => {
 				}
 			}, 100);
 		});
-	}
+	};
 
-	function sortNotes() {
+	const sortNotes = () => {
 		setRecentResults((prev) => {
 			return prev.sort((a, b) => {
 				return dayjs(b.date!).valueOf() - dayjs(a.date!).valueOf();
 			});
 		});
-	}
+	};
 
-	const handleSideBarItemClick = useCallback(
+	const handleClear = () => {
+		// TODO: what if the note has changed
+		setSearchResults([]);
+		setEditorValue("");
+		setChangeNote(true);
+		setCurrNoteID("");
+		setCurrNoteValue("");
+		title.current!.value = "";
+		searchInput.current!.value = "";
+		setLastUpdate(null);
+	};
+
+	const handleReader = () => {
+		if (currNoteID !== "")
+			navigate(`${currNoteID}/reader`, {
+				state: {
+					title: title.current?.value,
+					value: editorValue,
+				},
+			});
+	};
+
+	const handleNoteItemClick = useCallback(
 		(item: note) => {
 			if (currNoteValue !== editorValue) {
+				// console.log(editorValue, currNoteValue);
 				setConfirmSave(true);
 				// console.log(
 				// 	"dialog box appears"
@@ -227,30 +251,55 @@ const NotesPage = () => {
 		[editorValue, currNoteValue]
 	);
 
-	function handleCommandClick(item: command) {
+	const handleCommandClick = (item: command) => {
 		setBtnId((prev) => {
 			return { id: item.id, status: !prev.status };
 		});
-	}
+	};
 
-	const keyDownHandler = (e: KeyboardEvent) => {
-		if (e.key === "Escape") {
-			setShowModalSearch(false);
-			setConfirmDelete(false);
-			setConfirmSave(false);
-		}
-		if (e.ctrlKey && (e.key === "k" || e.key === "K")) {
-			e.preventDefault();
-			setShowModalSearch((prev) => !prev);
+	const keyDownHandler = useCallback(
+		(e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				setShowModalSearch(false);
+				setConfirmDelete(false);
+				setConfirmSave(false);
+			} else if (e.ctrlKey && (e.key === "k" || e.key === "K")) {
+				e.preventDefault();
+				setShowModalSearch((prev) => !prev);
+			} else if (e.ctrlKey && (e.key === "s" || e.key === "S")) {
+				e.preventDefault();
+				if (title.current?.value) {
+					handleNoteSave(title.current?.value, editorValue);
+				}
+			} else if (
+				e.ctrlKey &&
+				e.shiftKey &&
+				(e.key === "h" || e.key === "H")
+			) {
+				e.preventDefault();
+				setShowSideBar((prev) => !prev);
+			}
+		},
+		[editorValue]
+	);
+
+	const keyDownHandlerSave = (e: globalThis.KeyboardEvent) => {
+		e.preventDefault();
+		if (title.current?.value) {
+			handleNoteSave(title.current?.value, editorValue);
 		}
 	};
 
-	useEffect(() => {
-		window.addEventListener("keydown", keyDownHandler);
-		return () => {
-			window.removeEventListener("keydown", keyDownHandler);
-		};
-	}, []);
+	const keyDownHandlerClear = (e: globalThis.KeyboardEvent) => {
+		e.preventDefault();
+		handleClear();
+	};
+
+	const keyDownHandlerReader = (e: globalThis.KeyboardEvent) => {
+		e.preventDefault();
+		handleReader();
+	};
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -290,12 +339,30 @@ const NotesPage = () => {
 		localStorage.setItem("recentsCount", recentsCount.toString());
 	}, [recentsCount]);
 
+	useEffect(() => {
+		window.addEventListener("keydown", keyDownHandler);
+		return () => {
+			window.removeEventListener("keydown", keyDownHandler);
+		};
+	}, [keyDownHandler]);
+
+	useHotkeys(["ctrl+s", "ctrl+S"], keyDownHandlerSave);
+	useHotkeys(["ctrl+shift+c", "ctrl+shift+C"], keyDownHandlerClear);
+	useHotkeys(["ctrl+shift+z", "ctrl+shift+Z"], keyDownHandlerReader, [
+		currNoteID,
+		editorValue,
+	]);
+
 	return (
-		<div className="min-w-screen flex h-screen justify-center">
+		<div
+			className="min-w-screen flex h-screen justify-center"
+			// tabIndex is used so that the component can be focused
+			tabIndex={0}
+		>
 			{showModalSearch && (
 				<SearchModal
 					notesArr={recentResults}
-					handleNoteClick={handleSideBarItemClick}
+					handleNoteClick={handleNoteItemClick}
 					handleCommandClick={handleCommandClick}
 					setShowModal={setShowModalSearch}
 				/>
@@ -331,7 +398,7 @@ const NotesPage = () => {
 			)}
 
 			{showSideBar && (
-				<div className="lg:1/4 md:1/3 flex h-screen w-full flex-col items-center border-r-[1px] border-[#515151] bg-[#1e1e1e] sm:w-2/5">
+				<div className="md:1/3 flex h-screen w-full flex-col items-center border-r-[1px] border-[#484848] bg-[#1e1e1e] sm:w-2/5 lg:w-1/4">
 					<input
 						className="363636 mb-2 mt-8 h-fit w-4/5 rounded-lg bg-[#363636] px-2 py-[7px] text-[17px] font-semibold text-[#dadada]"
 						placeholder="Search"
@@ -384,6 +451,7 @@ const NotesPage = () => {
 									</button>
 								</div>
 								<div className="flex whitespace-pre-wrap text-[#a1a1a1]">
+									{/* TODO: change this to a button component */}
 									<button
 										className={`${
 											recentsCount === 5
@@ -444,7 +512,7 @@ const NotesPage = () => {
 										return (
 											<SideBarNoteItem
 												onClick={() =>
-													handleSideBarItemClick(item)
+													handleNoteItemClick(item)
 												}
 												bgColor={
 													currNoteID === item._id
@@ -497,16 +565,7 @@ const NotesPage = () => {
 					setShowSideBar((prev) => !prev);
 				}}
 				clearText="Clear"
-				clearFunction={() => {
-					setSearchResults([]);
-					setEditorValue("");
-					setChangeNote(true);
-					setCurrNoteID("");
-					setCurrNoteValue("");
-					title.current!.value = "";
-					searchInput.current!.value = "";
-					setLastUpdate(null);
-				}}
+				clearFunction={handleClear}
 				newText="New"
 				newFunction={() => {
 					setEditorValue("");
@@ -521,15 +580,8 @@ const NotesPage = () => {
 					setConfirmDelete(true);
 				}}
 				enableDelete={currNoteID === "" ? true : false}
-				readingModeText="Reading Mode"
-				readingModeFunction={() => {
-					navigate(`${currNoteID}/reader`, {
-						state: {
-							title: title.current?.value,
-							value: editorValue,
-						},
-					});
-				}}
+				readingModeText="Zen Mode"
+				readingModeFunction={handleReader}
 				enableReadingMode={currNoteID === "" ? true : false}
 				saveStatusText={isSaving}
 				saveStatusFunction={() => {

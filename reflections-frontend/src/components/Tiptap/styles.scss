@@ -43,8 +43,8 @@
 	}
 
 	pre {
-		// background: #323538;
-		background: #1c1c1c;
+		// background: #1c1c1c;
+		background: #343434;
 		color: #e8e8e8;
 		font-family: "JetBrainsMono", monospace;
 		padding: 0.75rem 1rem;
@@ -52,7 +52,7 @@
 		margin-top: 1rem;
 		margin-bottom: 1rem;
 		margin-right: 1.5rem;
-		border-width: 1px;
+		// border-width: 1px;
 		border-color: #57575784;
 
 		code {
@@ -87,7 +87,7 @@
 		.hljs-literal,
 		.hljs-type,
 		.hljs-params {
-			color: #fbbc88;
+			color: #f7ae72;
 		}
 
 		.hljs-string,
@@ -98,7 +98,7 @@
 
 		.hljs-title,
 		.hljs-section {
-			color: #faf594;
+			color: #c3a1f9;
 		}
 
 		.hljs-keyword,

@@ -158,14 +158,15 @@ const SearchModal = ({
 	return (
 		<div
 			className="fixed z-10 flex h-screen w-screen justify-center bg-black/[80%]"
+			tabIndex={0}
 			// onKeyDown={keyDownHandler}
 		>
 			<div className="mt-12 flex h-[70%] w-1/2 flex-col items-center gap-4 rounded-lg bg-[#333333] p-4">
 				<input
 					type="text"
-					className="flex h-14 w-full items-center rounded-lg bg-[#1e1e1e] px-4 py-3	 text-white"
+					className="flex h-14 w-full items-center rounded-lg bg-[#1f1f1f] px-4 py-2	 text-white"
 					ref={searchRef}
-					placeholder="Search"
+					placeholder="Search for notes or commands"
 					value={searchValue}
 					onChange={(e) => {
 						setSearchValue(e.target.value);

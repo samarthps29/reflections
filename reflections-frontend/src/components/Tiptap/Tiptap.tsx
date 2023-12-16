@@ -75,6 +75,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 				</button>
 
 				<button
+					id="btn-paragraph"
 					onClick={() => editor.chain().focus().setParagraph().run()}
 					className={`${
 						editor.isActive("paragraph") ? "is-active" : ""
@@ -94,6 +95,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					bulletlist
 				</button>
 				<button
+					id="btn-number"
 					onClick={() =>
 						editor.chain().focus().toggleOrderedList().run()
 					}
@@ -104,6 +106,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					orderedlist
 				</button>
 				<button
+					id="btn-codeblock"
 					onClick={() =>
 						editor.chain().focus().toggleCodeBlock().run()
 					}
@@ -114,6 +117,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					codeblock
 				</button>
 				<button
+					id="btn-blockquote"
 					onClick={() =>
 						editor.chain().focus().toggleBlockquote().run()
 					}
@@ -124,6 +128,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					blockquote
 				</button>
 				<button
+					id="btn-horizontalrule"
 					onClick={() =>
 						editor.chain().focus().setHorizontalRule().run()
 					}
@@ -132,6 +137,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					horizontalrule
 				</button>
 				<button
+					id="btn-h1"
 					onClick={() =>
 						editor.chain().focus().toggleHeading({ level: 3 }).run()
 					}
@@ -144,6 +150,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					h1
 				</button>
 				<button
+					id="btn-h2"
 					onClick={() =>
 						editor.chain().focus().toggleHeading({ level: 4 }).run()
 					}
@@ -156,6 +163,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					h2
 				</button>
 				<button
+					id="btn-purple"
 					onClick={() =>
 						editor
 							.chain()
@@ -180,6 +188,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					purple
 				</button>
 				<button
+					id="btn-blue"
 					onClick={() =>
 						editor
 							.chain()
@@ -203,6 +212,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					blue
 				</button>
 				<button
+					id="btn-teal"
 					onClick={() =>
 						editor
 							.chain()
@@ -226,18 +236,21 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					teal
 				</button>
 				<button
+					id="btn-clearmarks"
 					onClick={() => editor.chain().focus().unsetAllMarks().run()}
 					className="flex rounded-md px-2 py-0.5  "
 				>
 					clearmarks
 				</button>
 				<button
+					id="btn-clearnodes"
 					onClick={() => editor.chain().focus().clearNodes().run()}
 					className="flex rounded-md px-2 py-0.5  "
 				>
 					clearnodes
 				</button>
 				<button
+					id="btn-undo"
 					onClick={() => editor.chain().focus().undo().run()}
 					disabled={!editor.can().chain().focus().undo().run()}
 					className="flex rounded-md px-2 py-0.5  "
@@ -245,6 +258,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 					undo
 				</button>
 				<button
+					id="btn-redo"
 					onClick={() => editor.chain().focus().redo().run()}
 					disabled={!editor.can().chain().focus().redo().run()}
 					className="flex rounded-md px-2 py-0.5  "
