@@ -20,5 +20,3 @@ Welcome to Reflections, your personal space for jotting down thoughts, ideas, an
 | CTRL + SHIFT + c   | Clear the editor    |
 | CTRL + SHIFT + h   | Show/Hide Sidebar   |
 | CTRL + SHIFT + d   | Delete current note |
-
-The app is live at - https://reflections.cyclic.app/
