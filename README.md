@@ -1,3 +1,5 @@
+NOTE - Cyclic is shutting down. I'll need to host it somewhere else.
+
 ### Reflections
 Welcome to Reflections, your personal space for jotting down thoughts, ideas, and notes effortlessly. This feature-rich web app not only simplifies the note-taking process but elevates it with advanced features and a user-friendly interface.
 
